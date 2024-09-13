@@ -23,41 +23,41 @@ func main() {
 	}
 }
 
-type Data struct {
-	results              map[int][]int
-	freshmen             []int
-	seniors              []int
-	pairableSeniors      []int
-	seniorsPairedCount   map[int]uint
-	waitingFreshmenCount uint
-	luckyCount           uint
-	seniorsPairedMax     uint
-	baseDrawTimes        uint
+type Data[T comparable] struct {
+	results              map[T][]T
+	freshmen             []T
+	seniors              []T
+	pairableSeniors      []T
+	seniorsPairedCount   map[T]int
+	waitingFreshmenCount int
+	luckyCount           int
+	seniorsPairedMax     int
+	baseDrawTimes        int
 }
 
-func newData(freshmen []int, seniors []int) Data {
-	data := Data{
-		results:              make(map[int][]int, len(freshmen)),
+func newData[T comparable](freshmen []T, seniors []T) Data[T] {
+	data := Data[T]{
+		results:              make(map[T][]T, len(freshmen)),
 		freshmen:             slices.Clone(freshmen),
 		seniors:              slices.Clone(seniors),
 		pairableSeniors:      slices.Clone(seniors),
-		seniorsPairedCount:   make(map[int]uint, len(seniors)),
-		waitingFreshmenCount: uint(len(freshmen)),
+		seniorsPairedCount:   make(map[T]int, len(seniors)),
+		waitingFreshmenCount: len(freshmen),
 		luckyCount:           0,
-		seniorsPairedMax:     uint(len(freshmen) / len(seniors)),
+		seniorsPairedMax:     len(freshmen) / len(seniors),
 		baseDrawTimes:        1,
 	}
 
-	for k := range seniors {
-		data.seniorsPairedCount[k] = 0
+	for _, value := range seniors {
+		data.seniorsPairedCount[value] = 0
 	}
 
 	if len(freshmen) < len(seniors) {
-		data.baseDrawTimes = uint(len(seniors) / len(freshmen))
+		data.baseDrawTimes = len(seniors) / len(freshmen)
 	}
 
 	if len(seniors) > len(freshmen) {
-		data.luckyCount = uint(len(seniors) % len(freshmen))
+		data.luckyCount = len(seniors) % len(freshmen)
 	}
 
 	if len(freshmen)%len(seniors) != 0 {
@@ -67,16 +67,16 @@ func newData(freshmen []int, seniors []int) Data {
 	return data
 }
 
-func (d *Data) Results() map[int][]int {
+func (d *Data[T]) Results() map[T][]T {
 	return maps.Clone(d.results)
 }
 
-func (d *Data) Draw(freshNumber int) ([]int, error) {
-	if !slices.Contains(d.freshmen, freshNumber) {
-		return []int{}, fmt.Errorf("freshNumber '%v' not in fresh list", freshNumber)
+func (d *Data[T]) Draw(freshman T) ([]T, error) {
+	if !slices.Contains(d.freshmen, freshman) {
+		return []T{}, fmt.Errorf("freshNumber '%v' not in fresh list", freshman)
 	}
 
-	if result, inMap := d.results[freshNumber]; inMap {
+	if result, inMap := d.results[freshman]; inMap {
 		return result, nil
 	}
 
@@ -86,17 +86,18 @@ func (d *Data) Draw(freshNumber int) ([]int, error) {
 		d.luckyCount--
 	}
 
-	result := make([]int, 0, drawTimes)
+	result := make([]T, 0, drawTimes)
 	for range drawTimes {
 		randIndex := rand.Intn(len(d.pairableSeniors))
 		for slices.Contains(result, d.pairableSeniors[randIndex]) {
 			randIndex = rand.Intn(len(d.pairableSeniors))
 		}
+		paired := d.pairableSeniors[randIndex]
 
-		d.seniorsPairedCount[randIndex]++
-		result = append(result, d.pairableSeniors[randIndex])
+		result = append(result, paired)
+		d.seniorsPairedCount[paired]++
 
-		if d.seniorsPairedCount[randIndex] >= d.seniorsPairedMax {
+		if d.seniorsPairedCount[paired] >= d.seniorsPairedMax {
 			d.pairableSeniors[randIndex] = d.pairableSeniors[len(d.pairableSeniors)-1]
 			d.pairableSeniors = d.pairableSeniors[:len(d.pairableSeniors)-1]
 		}
