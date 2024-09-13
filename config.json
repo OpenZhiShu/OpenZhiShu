@@ -1,0 +1,18 @@
+{
+	"homepage": {
+		"type": "image"
+	},
+	"drawing": {
+		"background": {
+			"type": "video"
+		},
+		"elements": [
+			{
+				"type": "video"
+			},
+			{
+				"type": "image"
+			}
+		]
+	}
+}
