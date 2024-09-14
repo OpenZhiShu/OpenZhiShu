@@ -1,6 +1,23 @@
 {
 	"homepage": {
-		"type": "image"
+		"background": {
+			"type": "video",
+			"content": ""
+		},
+		"elements": [
+			{
+				"type": "video",
+				"position": "",
+				"size": "",
+				"content": ""
+			},
+			{
+				"type": "image",
+				"position": "",
+				"size": "",
+				"content": ""
+			}
+		]
 	},
 	"drawing": {
 		"background": {
@@ -8,10 +25,16 @@
 		},
 		"elements": [
 			{
-				"type": "video"
+				"type": "video",
+				"position": "",
+				"size": "",
+				"content": ""
 			},
 			{
-				"type": "image"
+				"type": "image",
+				"position": "",
+				"size": "",
+				"content": ""
 			}
 		]
 	}

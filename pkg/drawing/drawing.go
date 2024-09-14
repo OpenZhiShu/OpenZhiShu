@@ -1,4 +1,4 @@
-package main
+package drawing
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"slices"
 )
 
-func main() {
+func test() {
 	freshmen := []int{1, 2, 3, 4, 5, 6, 7}
 	seniors := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	// seniors := []int{1, 2, 3, 4, 5, 6}
