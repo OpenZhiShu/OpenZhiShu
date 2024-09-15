@@ -71,6 +71,20 @@ func (d *Data[T]) Results() map[T][]T {
 	return maps.Clone(d.results)
 }
 
+func (d *Data[T]) Finished() bool {
+	return d.waitingFreshmenCount == 0
+}
+
+func (d *Data[T]) DrawAll() (map[T][]T, error) {
+	for _, freshman := range d.freshmen {
+		_, err := d.Draw(freshman)
+		if err != nil {
+			return map[T][]T{}, nil
+		}
+	}
+	return d.Results(), nil
+}
+
 func (d *Data[T]) Draw(freshman T) ([]T, error) {
 	if !slices.Contains(d.freshmen, freshman) {
 		return []T{}, fmt.Errorf("freshNumber '%v' not in fresh list", freshman)
