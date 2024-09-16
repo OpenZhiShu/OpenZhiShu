@@ -1,0 +1,17 @@
+{{if ne .Link ""}}
+<a href="{{.Link}}">
+{{end}}
+
+<img src="{{.Content}}" class="element" style="
+	{{if ne .ObjectFit ""}}object-fit: {{.ObjectFit}};{{end}}
+	{{if ne .Width ""}}width: {{.Width}};{{end}}
+	{{if ne .Height ""}}height: {{.Height}};{{end}}
+	{{if ne .Top ""}}top: {{.Top}};{{end}}
+	{{if ne .Bottom ""}}bottom: {{.Bottom}};{{end}}
+	{{if ne .Left ""}}left: {{.Left}};{{end}}
+	{{if ne .Right ""}}right: {{.Right}};{{end}}
+">
+
+{{if ne .Link ""}}
+</a>
+{{end}}

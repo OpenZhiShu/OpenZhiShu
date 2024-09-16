@@ -1,40 +1,46 @@
 {
 	"homepage": {
+		"body_color": "black",
+		"ratio": "2/1",
 		"background": {
-			"type": "video",
-			"content": ""
+			"type": "image",
+			"content": "/static/images/Abstract_2-Overlay_logo.png",
+			"object_fit": "cover"
 		},
 		"elements": [
 			{
-				"type": "video",
-				"position": "",
-				"size": "",
-				"content": ""
-			},
-			{
 				"type": "image",
-				"position": "",
-				"size": "",
-				"content": ""
+				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
+				"width": "35%",
+				"top": "10%",
+				"left": "0%",
+				"link": "/drawing"
 			}
 		]
 	},
 	"drawing": {
+		"body_color": "black",
+		"ratio": "2/1",
 		"background": {
-			"type": "video"
+			"type": "image",
+			"content": "/static/images/Abstract_2-Overlay_logo.png",
+			"object_fit": "cover"
 		},
 		"elements": [
 			{
-				"type": "video",
-				"position": "",
-				"size": "",
-				"content": ""
+				"type": "image",
+				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
+				"width": "50%",
+				"top": "10%",
+				"left": "0%"
 			},
 			{
 				"type": "image",
-				"position": "",
-				"size": "",
-				"content": ""
+				"content": "/static/images/home_icon.png",
+				"width": "10%",
+				"top": "5%",
+				"right": "5%",
+				"link": "/"
 			}
 		]
 	}

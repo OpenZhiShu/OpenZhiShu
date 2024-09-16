@@ -1,42 +1,27 @@
 package main
 
 import (
-	// "encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	// "OpenZhiShu/pkg/drawing"
+	"OpenZhiShu/pkg/config"
 )
 
-type Element interface {
-	HTML() template.HTML
-}
+func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		t, err := template.ParseFiles(filepath)
+		if err != nil {
+			fmt.Printf("eror: %g\n", err)
+			return
+		}
 
-type HomepageConfig struct {
-	Background Element
-	Elements   []Element
-}
-
-type AllConfig struct {
-	homepageConfig HomepageConfig
-}
-
-func handleHomepage(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./assets/templates/homepage.html")
-	if err != nil {
-		fmt.Printf("eror: %g\n", err)
-		return
+		err = t.Execute(w, data)
+		if err != nil {
+			fmt.Printf("eror: %g\n", err)
+		}
 	}
-
-	err = t.Execute(w, struct{}{})
-	if err != nil {
-		fmt.Printf("eror: %g\n", err)
-	}
-}
-
-func handleDrawing(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "the drawing page")
 }
 
 func main() {
@@ -50,9 +35,15 @@ func main() {
 	}
 	fmt.Printf("http://localhost:%v\n", port)
 
+	cfg, err := config.LoadConfig("./config.json")
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+		return
+	}
+
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
-	http.HandleFunc("/drawing", handleDrawing)
-	http.HandleFunc("/{$}", handleHomepage)
+	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/homepage.html", cfg.HomepageConfig))
+	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/drawing.html", cfg.DrawingConfig))
 	http.Handle("/", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))

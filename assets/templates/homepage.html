@@ -5,10 +5,13 @@
 	<link rel="stylesheet" href="/static/style/homepage.css">
 </head>
 
-<body>
-	<div style="width: 100%; height: 100%;">
-		<img src="/static/images/Abstract_2-Overlay_logo.png"
-			style="width: 100%; height: 100%; object-fit: contain;">
+<body style="background-color; {{.BodyColor}}">
+	<div class="main-frame" style="aspect-ratio: {{.Ratio}};">
+		{{.Background.HTML}}
+
+		{{range .Elements}}
+			{{.HTML}}
+		{{end}}
 	</div>
 </body>
 

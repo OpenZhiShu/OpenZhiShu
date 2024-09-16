@@ -2,11 +2,17 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="/static/style/drawing.css">
+	<link rel="stylesheet" href="/static/style/homepage.css">
 </head>
 
-<body>
-	<span>the drawing page</span>
+<body style="background-color; {{.BodyColor}}">
+	<div class="main-frame" style="aspect-ratio: {{.Ratio}};">
+		{{.Background.HTML}}
+
+		{{range .Elements}}
+			{{.HTML}}
+		{{end}}
+	</div>
 </body>
 
 </html>
