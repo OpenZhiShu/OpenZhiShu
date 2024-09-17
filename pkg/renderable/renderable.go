@@ -56,24 +56,13 @@ func verify[T interface{ getType() string }](m map[string]string, r T) error {
 	return nil
 }
 
-type Empty struct{}
-
-func (e Empty) getType() string {
-	return ""
-}
-
-func (e Empty) HTML() template.HTML {
-	return template.HTML("")
-}
-
-func (e Empty) Verify() error {
-	return nil
-}
-
 type Background struct {
-	Type      string `json:"type"`
-	Content   string `json:"content"`
-	ObjectFit string `json:"object_fit"`
+	Type     string       `json:"type"`
+	Content  string       `json:"content"`
+	Style    template.CSS `json:"style"`
+	Autoplay bool         `json:"autoplay"`
+	Loop     bool         `json:"loop"`
+	Muted    bool         `json:"muted"`
 }
 
 func (b Background) getType() string {
@@ -84,6 +73,7 @@ func (b Background) HTML() template.HTML {
 	return html(
 		map[string]string{
 			"image": "./assets/templates/renderable/background_image.html",
+			"video": "./assets/templates/renderable/background_video.html",
 		},
 		b,
 	)
@@ -93,27 +83,24 @@ func (b Background) Verify() error {
 	return verify(
 		map[string]string{
 			"image": "./assets/templates/renderable/background_image.html",
+			"video": "./assets/templates/renderable/background_video.html",
 		},
 		b,
 	)
 }
 
 type Element struct {
-	Type      string `json:"type"`
-	Content   string `json:"content"`
-	Width     string `json:"width,omitempty"`
-	Height    string `json:"height,omitempty"`
-	Top       string `json:"top,omitempty"`
-	Bottom    string `json:"bottom,omitempty"`
-	Left      string `json:"left,omitempty"`
-	Right     string `json:"right,omitempty"`
-	Link      string `json:"link,omitempty"`
-	ObjectFit string `json:"object_fit,omitempty"`
+	Type    string       `json:"type"`
+	Content string       `json:"content"`
+	Layout  template.CSS `json:"layout"`
+	Style   template.CSS `json:"style"`
+	Link    string       `json:"link"`
 }
 
 func (e Element) getType() string {
 	return e.Type
 }
+
 func (e Element) HTML() template.HTML {
 	return html(
 		map[string]string{

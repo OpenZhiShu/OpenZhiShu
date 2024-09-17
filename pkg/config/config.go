@@ -3,6 +3,7 @@ package config
 import (
 	"OpenZhiShu/pkg/renderable"
 	"encoding/json"
+	"html/template"
 	"os"
 )
 
@@ -13,7 +14,7 @@ type Config struct {
 
 type HomepageConfig struct {
 	BodyColor  string                `json:"body_color"`
-	Ratio      string                `json:"ratio"`
+	Ratio      template.CSS          `json:"ratio"`
 	Background renderable.Background `json:"background"`
 	Elements   []renderable.Element  `json:"elements"`
 }

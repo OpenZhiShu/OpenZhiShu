@@ -5,15 +5,18 @@
 		"background": {
 			"type": "image",
 			"content": "/static/images/Abstract_2-Overlay_logo.png",
-			"object_fit": "cover"
+			"style": "object-fit: cover;"
 		},
 		"elements": [
 			{
 				"type": "image",
 				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
-				"width": "35%",
-				"top": "10%",
-				"left": "0%",
+				"layout": "width: 35%; top: 10%; right: 0%;"
+			},
+			{
+				"type": "image",
+				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
+				"layout": "width: 35%; top: 10%; left: 0%;",
 				"link": "/drawing"
 			}
 		]
@@ -22,24 +25,23 @@
 		"body_color": "black",
 		"ratio": "2/1",
 		"background": {
-			"type": "image",
-			"content": "/static/images/Abstract_2-Overlay_logo.png",
-			"object_fit": "cover"
+			"type": "video",
+			"content": "/static/videos/Galaxy Brain meme.webm",
+			"style": "",
+			"autoplay": true,
+			"loop": true,
+			"muted": true
 		},
 		"elements": [
 			{
 				"type": "image",
 				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
-				"width": "50%",
-				"top": "10%",
-				"left": "0%"
+				"layout": "width: 50%; top: 10%; left: 0%;"
 			},
 			{
 				"type": "image",
 				"content": "/static/images/home_icon.png",
-				"width": "10%",
-				"top": "5%",
-				"right": "5%",
+				"layout": "width: 10%; top: 5%; right: 5%;",
 				"link": "/"
 			}
 		]
