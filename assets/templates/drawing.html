@@ -5,10 +5,8 @@
 	<link rel="stylesheet" href="/static/style/homepage.css">
 </head>
 
-<body style="background-color; {{.BodyColor}}">
+<body style="background-color: {{.BodyColor}};">
 	<div class="main-frame" style="aspect-ratio: {{.Ratio}};">
-		{{.Background.HTML}}
-
 		{{range .Elements}}
 			{{.HTML}}
 		{{end}}

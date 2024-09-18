@@ -56,45 +56,15 @@ func verify[T interface{ getType() string }](m map[string]string, r T) error {
 	return nil
 }
 
-type Background struct {
+type Element struct {
 	Type     string       `json:"type"`
 	Content  string       `json:"content"`
+	Layout   template.CSS `json:"layout"`
 	Style    template.CSS `json:"style"`
+	Link     string       `json:"link"`
 	Autoplay bool         `json:"autoplay"`
 	Loop     bool         `json:"loop"`
 	Muted    bool         `json:"muted"`
-}
-
-func (b Background) getType() string {
-	return b.Type
-}
-
-func (b Background) HTML() template.HTML {
-	return html(
-		map[string]string{
-			"image": "./assets/templates/renderable/background_image.html",
-			"video": "./assets/templates/renderable/background_video.html",
-		},
-		b,
-	)
-}
-
-func (b Background) Verify() error {
-	return verify(
-		map[string]string{
-			"image": "./assets/templates/renderable/background_image.html",
-			"video": "./assets/templates/renderable/background_video.html",
-		},
-		b,
-	)
-}
-
-type Element struct {
-	Type    string       `json:"type"`
-	Content string       `json:"content"`
-	Layout  template.CSS `json:"layout"`
-	Style   template.CSS `json:"style"`
-	Link    string       `json:"link"`
 }
 
 func (e Element) getType() string {
@@ -105,6 +75,7 @@ func (e Element) HTML() template.HTML {
 	return html(
 		map[string]string{
 			"image": "./assets/templates/renderable/element_image.html",
+			"video": "./assets/templates/renderable/element_video.html",
 		},
 		e,
 	)
@@ -114,6 +85,7 @@ func (e Element) Verify() error {
 	return verify(
 		map[string]string{
 			"image": "./assets/templates/renderable/element_image.html",
+			"video": "./assets/templates/renderable/element_video.html",
 		},
 		e,
 	)

@@ -8,22 +8,21 @@ import (
 )
 
 type Config struct {
-	HomepageConfig HomepageConfig `json:"homepage"`
-	DrawingConfig  DrawingConfig  `json:"drawing"`
+	HomepageConfig StaticConfig  `json:"homepage"`
+	DrawingConfig  StaticConfig  `json:"drawing"`
+	ResultConfig   DynamicConfig `json:"result"`
 }
 
-type HomepageConfig struct {
-	BodyColor  string                `json:"body_color"`
-	Ratio      template.CSS          `json:"ratio"`
-	Background renderable.Background `json:"background"`
-	Elements   []renderable.Element  `json:"elements"`
+type StaticConfig struct {
+	BodyColor string               `json:"body_color"`
+	Ratio     template.CSS         `json:"ratio"`
+	Elements  []renderable.Element `json:"elements"`
 }
 
-type DrawingConfig struct {
-	BodyColor  string                `json:"body_color"`
-	Ratio      string                `json:"ratio"`
-	Background renderable.Background `json:"background"`
-	Elements   []renderable.Element  `json:"elements"`
+type DynamicConfig struct {
+	BodyColor string               `json:"body_color"`
+	Ratio     template.CSS         `json:"ratio"`
+	Elements  []renderable.Element `json:"elements"`
 }
 
 func (c Config) Verify() error {
@@ -36,24 +35,9 @@ func (c Config) Verify() error {
 	return nil
 }
 
-func (h HomepageConfig) Verify() error {
-	if err := h.Background.Verify(); err != nil {
-		return err
-	}
-	for i := range h.Elements {
-		if err := h.Elements[i].Verify(); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (d DrawingConfig) Verify() error {
-	if err := d.Background.Verify(); err != nil {
-		return err
-	}
-	for i := range d.Elements {
-		if err := d.Elements[i].Verify(); err != nil {
+func (s StaticConfig) Verify() error {
+	for i := range s.Elements {
+		if err := s.Elements[i].Verify(); err != nil {
 			return err
 		}
 	}

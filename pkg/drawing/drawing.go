@@ -11,7 +11,7 @@ func test() {
 	freshmen := []int{1, 2, 3, 4, 5, 6, 7}
 	seniors := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	// seniors := []int{1, 2, 3, 4, 5, 6}
-	d := newData(freshmen, seniors)
+	d := MakeData(freshmen, seniors)
 	fmt.Printf("waitingFreshmenCount: %v\n", d.waitingFreshmenCount)
 	fmt.Printf("luckyCount: %v\n", d.luckyCount)
 	fmt.Printf("seniorsPairedMax: %v\n", d.seniorsPairedMax)
@@ -35,7 +35,7 @@ type Data[T comparable] struct {
 	baseDrawTimes        int
 }
 
-func newData[T comparable](freshmen []T, seniors []T) Data[T] {
+func MakeData[T comparable](freshmen []T, seniors []T) Data[T] {
 	data := Data[T]{
 		results:              make(map[T][]T, len(freshmen)),
 		freshmen:             slices.Clone(freshmen),
