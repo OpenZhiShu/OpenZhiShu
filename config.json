@@ -11,12 +11,13 @@
 			{
 				"type": "image",
 				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
-				"style": "width: 35%; top: 10%; right: 0%;"
+				"style": "width: 35%; top: 10%; right: 0%;",
+				"appear": 1000
 			},
 			{
 				"type": "image",
 				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
-				"style": "width: 35%; top: 10%; left: 0%;",
+				"style": "width: 35%; height: 10%; top: 10%; left: 0%;",
 				"link": "/drawing"
 			}
 		]
@@ -58,8 +59,9 @@
 			{
 				"type": "image",
 				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
-				"appear": 2,
-				"hide": 6
+				"style": "top: 20%;",
+				"appear": 1000,
+				"hide": 5000
 			},
 			{
 				"type": "variable",

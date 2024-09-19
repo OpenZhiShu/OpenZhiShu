@@ -72,7 +72,9 @@ type Element struct {
 	Type    string         `json:"type"`
 	Content string         `json:"content"`
 	Style   template.CSS   `json:"style"`
-	Link    string         `json:"link"`
+	Link    template.URL   `json:"link"`
+	Appear  int            `json:"appear"`
+	Hide    int            `json:"hide"`
 	Other   map[string]any `json:"-"`
 }
 

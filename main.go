@@ -29,7 +29,7 @@ func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Re
 	}
 }
 
-func genDrawingHandleFunc(cfg config.DynamicConfig, drawingData *drawing.Data[int]) func(http.ResponseWriter, *http.Request) {
+func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int]) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		number, err := strconv.Atoi(r.PathValue("number"))
 		if err != nil {
@@ -59,10 +59,29 @@ func genDrawingHandleFunc(cfg config.DynamicConfig, drawingData *drawing.Data[in
 			elems[i].Content = value
 		}
 
-		newCfg := config.DynamicConfig{BodyColor: cfg.BodyColor, Ratio: cfg.Ratio, Elements: elems}
+		newCfg := config.Config{BodyColor: cfg.BodyColor, Ratio: cfg.Ratio, Elements: elems}
 
-		genHandleFunc("./assets/templates/result.html", newCfg)(w, r)
+		genHandleFunc("./assets/templates/page.html", newCfg)(w, r)
 	}
+}
+
+type Config struct {
+	HomepageConfig config.Config `json:"homepage"`
+	DrawingConfig  config.Config `json:"drawing"`
+	ResultConfig   config.Config `json:"result"`
+}
+
+func (c Config) Verify() error {
+	if err := c.HomepageConfig.Verify(); err != nil {
+		return err
+	}
+	if err := c.DrawingConfig.Verify(); err != nil {
+		return err
+	}
+	if err := c.ResultConfig.Verify(); err != nil {
+		return err
+	}
+	return nil
 }
 
 type List struct {
@@ -81,7 +100,7 @@ func main() {
 	}
 	fmt.Printf("http://localhost:%v\n", port)
 
-	cfg, err := config.LoadConfig("./config.json")
+	cfg, err := config.LoadConfig[Config]("./config.json")
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		return
@@ -101,8 +120,8 @@ func main() {
 	drawingData := drawing.MakeData(list.Freshmen, list.Seniors)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
-	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/static_page.html", cfg.HomepageConfig))
-	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/static_page.html", cfg.DrawingConfig))
+	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
+	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData))
 	http.Handle("/", http.NotFoundHandler())
 

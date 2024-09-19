@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="/static/style/page_style.css">
+</head>
+
+<body style="background-color: {{.BodyColor}};">
+	<div class="main-frame" style="aspect-ratio: {{.Ratio}};">
+		{{range $i, $e := .Elements}}
+			{{$e.HTML $i}}
+		{{end}}
+	</div>
+</body>
+
+</html>
+
+<script>
+	let a = [
+		{{range $i, $e := .Elements}}
+			{{if ne $e.Appear 0}}
+				{ id: {{$i}}, appear: true, delay: {{$e.Appear}}, },
+			{{end}}
+			{{if ne $e.Hide 0}}
+				{ id: {{$i}}, appear: false, delay: {{$e.Hide}}, },
+			{{end}}
+		{{end}}
+	];
+	a.forEach((e) => {
+		let elem = document.getElementById(`element-${e.id}`);
+		setTimeout(() => {
+			if (e.appear) {
+				elem.classList.remove("hide");
+			} else {
+				elem.classList.add("hide");
+			}
+		}, e.delay)
+	});
+</script>
