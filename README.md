@@ -19,6 +19,8 @@
 
 page
 
+- title: string  
+    網頁標題
 - body_color: string  
     當視窗比例不符合時，"黑邊"的顏色
 - ratio: string  
