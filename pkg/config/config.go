@@ -8,6 +8,7 @@ import (
 )
 
 type Config struct {
+	Title     string             `json:"title"`
 	BodyColor string             `json:"body_color"`
 	Ratio     template.CSS       `json:"ratio"`
 	Elements  []elements.Element `json:"elements"`

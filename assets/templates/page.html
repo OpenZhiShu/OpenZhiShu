@@ -3,6 +3,7 @@
 
 <head>
 	<link rel="stylesheet" href="/static/style/page_style.css">
+	{{if ne .Title ""}}<title>{{.Title}}</title>{{end}}
 </head>
 
 <body style="background-color: {{.BodyColor}};">

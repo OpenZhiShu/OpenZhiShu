@@ -1,5 +1,6 @@
 {
 	"homepage": {
+		"title": "homepage",
 		"body_color": "black",
 		"ratio": "2/1",
 		"elements": [
@@ -23,6 +24,7 @@
 		]
 	},
 	"drawing": {
+		"title": "drawing",
 		"body_color": "black",
 		"ratio": "2/1",
 		"elements": [
@@ -48,6 +50,7 @@
 		]
 	},
 	"result": {
+		"title": "result",
 		"body_color": "black",
 		"ratio": "2/1",
 		"elements": [
