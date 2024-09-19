@@ -14,7 +14,7 @@ type Renderable interface {
 	Verify() error
 }
 
-func html[T interface{ getType() string }](m map[string]string, r T) template.HTML {
+func html[T interface{ getType() string }](m map[string]string, r T, index int) template.HTML {
 	filepath, inMap := m[r.getType()]
 	if !inMap {
 		panic(fmt.Sprintf("unknown background type: %v", r.getType()))
@@ -26,7 +26,10 @@ func html[T interface{ getType() string }](m map[string]string, r T) template.HT
 	}
 
 	buf := new(bytes.Buffer)
-	err = t.Execute(buf, r)
+	err = t.Execute(buf, struct {
+		Value T
+		Index int
+	}{r, index})
 	if err != nil {
 		panic(fmt.Sprintf("error: %v", err))
 	}
@@ -54,7 +57,10 @@ func verify[T interface{ getType() string }](m map[string]string, r T) error {
 	}
 
 	buf := new(bytes.Buffer)
-	err = t.Execute(buf, r)
+	err = t.Execute(buf, struct {
+		Value T
+		Index int
+	}{r, 0})
 	if err != nil {
 		return err
 	}
@@ -96,7 +102,7 @@ func (e Element) getType() string {
 	return e.Type
 }
 
-func (e Element) HTML() template.HTML {
+func (e Element) HTML(index int) template.HTML {
 	return html(
 		map[string]string{
 			"image": "./assets/templates/elements/image.html",
@@ -104,6 +110,7 @@ func (e Element) HTML() template.HTML {
 			"text":  "./assets/templates/elements/text.html",
 		},
 		e,
+		index,
 	)
 }
 

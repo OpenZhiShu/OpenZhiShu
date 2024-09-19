@@ -7,8 +7,8 @@
 
 <body style="background-color: {{.BodyColor}};">
 	<div class="main-frame" style="aspect-ratio: {{.Ratio}};">
-		{{range .Elements}}
-			{{.HTML}}
+		{{range $i, $e := .Elements}}
+			{{$e.HTML $i}}
 		{{end}}
 	</div>
 </body>

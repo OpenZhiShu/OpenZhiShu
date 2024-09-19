@@ -101,8 +101,8 @@ func main() {
 	drawingData := drawing.MakeData(list.Freshmen, list.Seniors)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
-	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/homepage.html", cfg.HomepageConfig))
-	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/drawing.html", cfg.DrawingConfig))
+	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/static_page.html", cfg.HomepageConfig))
+	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/static_page.html", cfg.DrawingConfig))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData))
 	http.Handle("/", http.NotFoundHandler())
 

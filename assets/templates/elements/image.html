@@ -1,6 +1,8 @@
+{{with .Value}}
 <img
+	id="element-{{$.Index}}"
 	class="element"
 	src="{{.Content}}"
 	{{if ne .Link ""}}onclick="window.location.href='{{.Link}}'"{{end}}
 	style="{{.Style}}">
-
+{{end}}

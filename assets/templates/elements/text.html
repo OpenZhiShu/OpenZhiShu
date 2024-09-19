@@ -1,6 +1,9 @@
+{{with .Value}}
 <span
+	id="element-{{$.Index}}"
 	class="element"
 	{{if ne .Link ""}}onclick="window.location.href='{{.Link}}'"{{end}}
 	style="{{.Style}}">
 	{{.Content}}
 </span>
+{{end}}
