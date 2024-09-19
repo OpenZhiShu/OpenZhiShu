@@ -65,7 +65,6 @@ func verify[T interface{ getType() string }](m map[string]string, r T) error {
 type Element struct {
 	Type    string         `json:"type"`
 	Content string         `json:"content"`
-	Layout  template.CSS   `json:"layout"`
 	Style   template.CSS   `json:"style"`
 	Link    string         `json:"link"`
 	Other   map[string]any `json:"-"`

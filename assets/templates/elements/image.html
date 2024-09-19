@@ -1,11 +1,6 @@
-<div class="element" style="{{.Layout}}">
-	{{if ne .Link ""}}
-	<a href="{{.Link}}">
-	{{end}}
+<img
+	class="element"
+	src="{{.Content}}"
+	{{if ne .Link ""}}onclick="window.location.href='{{.Link}}'"{{end}}
+	style="{{.Style}}">
 
-		<img src="{{.Content}}" style="{{.Style}}">
-
-	{{if ne .Link ""}}
-	</a>
-	{{end}}
-</div>
