@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"slices"
 	"strconv"
 
 	"OpenZhiShu/pkg/config"
@@ -28,7 +29,7 @@ func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Re
 	}
 }
 
-func genDrawingHandleFunc(config config.DynamicConfig, drawingData *drawing.Data[int]) func(http.ResponseWriter, *http.Request) {
+func genDrawingHandleFunc(cfg config.DynamicConfig, drawingData *drawing.Data[int]) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		number, err := strconv.Atoi(r.PathValue("number"))
 		if err != nil {
@@ -39,39 +40,29 @@ func genDrawingHandleFunc(config config.DynamicConfig, drawingData *drawing.Data
 			genHandleFunc("./assets/templates/error.html", err.Error())(w, r)
 			return
 		}
+		fmt.Printf("number: %v, result: %v, len: %v\n", number, result, len(drawingData.Results()))
 
 		variables := map[string]string{}
 		variables["result"] = fmt.Sprintf("%v", result)
 
-		for i := range config.Elements {
-			if config.Elements[i].Type != "variable" {
+		elems := slices.Clone(cfg.Elements)
+		for i := range elems {
+			if elems[i].Type != "variable" {
 				continue
 			}
-			config.Elements[i].Type = "text"
-			value, inMap := variables[config.Elements[i].Content]
+			elems[i].Type = "text"
+			value, inMap := variables[elems[i].Content]
 			if !inMap {
-				config.Elements[i].Content = fmt.Sprintf("no variable `%v`", config.Elements[i].Content)
+				elems[i].Content = fmt.Sprintf("no variable `%v`", elems[i].Content)
 				continue
 			}
-			config.Elements[i].Content = value
+			elems[i].Content = value
 		}
 
-		genHandleFunc("./assets/templates/result.html", config)(w, r)
-	}
-}
+		newCfg := config.DynamicConfig{BodyColor: cfg.BodyColor, Ratio: cfg.Ratio, Elements: elems}
 
-func DrawingResult(cfg config.DynamicConfig, r *http.Request) (any, error) {
-	number, err := strconv.Atoi(r.PathValue("number"))
-	if err != nil {
-		return nil, err
+		genHandleFunc("./assets/templates/result.html", newCfg)(w, r)
 	}
-	d := drawing.MakeData([]int{}, []int{})
-	result, err := d.Draw(number)
-	if err != nil {
-		return nil, err
-	}
-	_ = result
-	return cfg, nil
 }
 
 type List struct {
