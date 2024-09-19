@@ -1,0 +1,11 @@
+<div class="element" style="{{.Layout}}">
+	{{if ne .Link ""}}
+	<a href="{{.Link}}">
+	{{end}}
+
+		<span style="{{.Style}}">{{.Content}}</span>
+
+	{{if ne .Link ""}}
+	</a>
+	{{end}}
+</div>

@@ -47,5 +47,38 @@
 				"link": "/"
 			}
 		]
+	},
+	"result": {
+		"body_color": "black",
+		"ratio": "2/1",
+		"elements": [
+			{
+				"type": "image",
+				"content": "/static/images/Abstract_2-Overlay_logo.png",
+				"layout": "width: 100%; height: 100%;",
+				"style": "width: 100%; height: 100%; object-fit: cover;"
+			},
+			{
+				"type": "image",
+				"content": "https://yt3.googleusercontent.com/lkH37D712tiyphnu0Id0D5MwwQ7IRuwgQLVD05iMXlDWO-kDHut3uI4MgIEAQ9StK0qOST7fiA=s160-c-k-c0x00ffffff-no-rj",
+				"layout": "width: 50%; top: 10%; left: 0%;"
+			},
+			{
+				"type": "variable",
+				"content": "result",
+				"layout": "top: 50%; left: 50%;"
+			},
+			{
+				"type": "variable",
+				"content": "a_var",
+				"layout": "top: 65%; left: 50%;"
+			},
+			{
+				"type": "image",
+				"content": "/static/images/home_icon.png",
+				"layout": "width: 10%; top: 5%; right: 5%;",
+				"link": "/"
+			}
+		]
 	}
 }

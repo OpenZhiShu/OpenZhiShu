@@ -1,0 +1,11 @@
+<div class="element" style="{{.Layout}}">
+	{{if ne .Link ""}}
+	<a href="{{.Link}}">
+	{{end}}
+		<video style="{{.Style}}" {{if .Other.autoplay}}autoplay {{end}}{{if .Other.loop}}loop {{end}}{{if .Other.muted}}muted {{end}}>
+			<source src="{{.Content}}">
+		</video>
+	{{if ne .Link ""}}
+	</a>
+	{{end}}
+</div>

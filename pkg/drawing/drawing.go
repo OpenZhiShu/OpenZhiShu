@@ -117,6 +117,7 @@ func (d *Data[T]) Draw(freshman T) ([]T, error) {
 		}
 	}
 
+	d.results[freshman] = result
 	d.waitingFreshmenCount--
 
 	return result, nil

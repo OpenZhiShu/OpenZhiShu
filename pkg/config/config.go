@@ -1,7 +1,7 @@
 package config
 
 import (
-	"OpenZhiShu/pkg/renderable"
+	"OpenZhiShu/pkg/elements"
 	"encoding/json"
 	"html/template"
 	"os"
@@ -14,15 +14,15 @@ type Config struct {
 }
 
 type StaticConfig struct {
-	BodyColor string               `json:"body_color"`
-	Ratio     template.CSS         `json:"ratio"`
-	Elements  []renderable.Element `json:"elements"`
+	BodyColor string             `json:"body_color"`
+	Ratio     template.CSS       `json:"ratio"`
+	Elements  []elements.Element `json:"elements"`
 }
 
 type DynamicConfig struct {
-	BodyColor string               `json:"body_color"`
-	Ratio     template.CSS         `json:"ratio"`
-	Elements  []renderable.Element `json:"elements"`
+	BodyColor string             `json:"body_color"`
+	Ratio     template.CSS       `json:"ratio"`
+	Elements  []elements.Element `json:"elements"`
 }
 
 func (c Config) Verify() error {
@@ -32,12 +32,24 @@ func (c Config) Verify() error {
 	if err := c.DrawingConfig.Verify(); err != nil {
 		return err
 	}
+	if err := c.ResultConfig.Verify(); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s StaticConfig) Verify() error {
 	for i := range s.Elements {
 		if err := s.Elements[i].Verify(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (d DynamicConfig) Verify() error {
+	for i := range d.Elements {
+		if err := d.Elements[i].Verify(); err != nil {
 			return err
 		}
 	}

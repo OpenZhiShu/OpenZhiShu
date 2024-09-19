@@ -1,10 +1,12 @@
-package renderable
+package elements
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"os"
+	"reflect"
 )
 
 type Renderable interface {
@@ -33,7 +35,11 @@ func html[T interface{ getType() string }](m map[string]string, r T) template.HT
 }
 
 func verify[T interface{ getType() string }](m map[string]string, r T) error {
-	filepath, inMap := m[r.getType()]
+	ty := r.getType()
+	if ty == "variable" {
+		ty = "text"
+	}
+	filepath, inMap := m[ty]
 	if !inMap {
 		return fmt.Errorf("unknown background type: %v", r.getType())
 	}
@@ -44,27 +50,47 @@ func verify[T interface{ getType() string }](m map[string]string, r T) error {
 
 	t, err := template.ParseFiles(filepath)
 	if err != nil {
-		return fmt.Errorf("cannot parse template file: %v", err)
+		return err
 	}
 
 	buf := new(bytes.Buffer)
 	err = t.Execute(buf, r)
 	if err != nil {
-		return fmt.Errorf("error: %v", err)
+		return err
 	}
 
 	return nil
 }
 
 type Element struct {
-	Type     string       `json:"type"`
-	Content  string       `json:"content"`
-	Layout   template.CSS `json:"layout"`
-	Style    template.CSS `json:"style"`
-	Link     string       `json:"link"`
-	Autoplay bool         `json:"autoplay"`
-	Loop     bool         `json:"loop"`
-	Muted    bool         `json:"muted"`
+	Type    string         `json:"type"`
+	Content string         `json:"content"`
+	Layout  template.CSS   `json:"layout"`
+	Style   template.CSS   `json:"style"`
+	Link    string         `json:"link"`
+	Other   map[string]any `json:"-"`
+}
+
+func (e *Element) UnmarshalJSON(data []byte) error {
+	err := json.Unmarshal(data, &e.Other)
+	if err != nil {
+		return err
+	}
+
+	v := reflect.ValueOf(e).Elem()
+	t := reflect.TypeOf(e).Elem()
+	for i := range t.NumField() {
+		if t.Field(i).Name == "Other" {
+			continue
+		}
+
+		key := t.Field(i).Tag.Get("json")
+		if reflect.TypeOf(e.Other[key]) != reflect.TypeOf(nil) {
+			v.Field(i).Set(reflect.ValueOf(e.Other[key]).Convert(t.Field(i).Type))
+		}
+		delete(e.Other, key)
+	}
+	return nil
 }
 
 func (e Element) getType() string {
@@ -74,8 +100,9 @@ func (e Element) getType() string {
 func (e Element) HTML() template.HTML {
 	return html(
 		map[string]string{
-			"image": "./assets/templates/renderable/element_image.html",
-			"video": "./assets/templates/renderable/element_video.html",
+			"image": "./assets/templates/elements/image.html",
+			"video": "./assets/templates/elements/video.html",
+			"text":  "./assets/templates/elements/text.html",
 		},
 		e,
 	)
@@ -84,8 +111,9 @@ func (e Element) HTML() template.HTML {
 func (e Element) Verify() error {
 	return verify(
 		map[string]string{
-			"image": "./assets/templates/renderable/element_image.html",
-			"video": "./assets/templates/renderable/element_video.html",
+			"image": "./assets/templates/elements/image.html",
+			"video": "./assets/templates/elements/video.html",
+			"text":  "./assets/templates/elements/text.html",
 		},
 		e,
 	)
