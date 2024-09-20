@@ -1,0 +1,8 @@
+{{with .Value}}
+<input
+	id="element-{{$.Index}}"
+	class="element{{if ne .Appear 0}} hide{{end}}"
+	type="{{.Other.input_type}}"
+	placeholder="{{.Content}}"
+	style="{{.Style}}">
+{{end}}

@@ -110,6 +110,8 @@ func (e Element) HTML(index int) template.HTML {
 			"image": "./assets/templates/elements/image.html",
 			"video": "./assets/templates/elements/video.html",
 			"text":  "./assets/templates/elements/text.html",
+			"input": "./assets/templates/elements/input.html",
+			"jump":  "./assets/templates/elements/jump.html",
 		},
 		e,
 		index,
@@ -122,6 +124,8 @@ func (e Element) Verify() error {
 			"image": "./assets/templates/elements/image.html",
 			"video": "./assets/templates/elements/video.html",
 			"text":  "./assets/templates/elements/text.html",
+			"input": "./assets/templates/elements/input.html",
+			"jump":  "./assets/templates/elements/jump.html",
 		},
 		e,
 	)
