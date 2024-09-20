@@ -1,13 +1,13 @@
 {
-	"freshmen": [
-		1,
-		2,
-		3
-	],
-	"seniors": [
-		1,
-		2,
-		3,
-		4
-	]
+	"freshmen": {
+		"1": "name of 1",
+		"2": "name of 2",
+		"3": "name of 3"
+	},
+	"seniors": {
+		"1": "name of 1",
+		"2": "name of 2",
+		"3": "name of 3",
+		"4": "name of 4"
+	}
 }

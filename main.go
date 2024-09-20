@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"maps"
 	"net/http"
 	"os"
 	"slices"
 	"strconv"
+	"strings"
 
 	"OpenZhiShu/pkg/config"
 	"OpenZhiShu/pkg/drawing"
@@ -29,7 +31,7 @@ func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Re
 	}
 }
 
-func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int]) func(http.ResponseWriter, *http.Request) {
+func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int], list *List) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		number, err := strconv.Atoi(r.PathValue("number"))
 		if err != nil {
@@ -42,8 +44,13 @@ func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int]) fun
 		}
 		fmt.Printf("number: %v, result: %v, len: %v\n", number, result, len(drawingData.Results()))
 
+		names := make([]string, len(result))
+		for i, v := range result {
+			names[i] = list.Seniors[v]
+		}
+
 		variables := map[string]string{}
-		variables["result"] = fmt.Sprintf("%v", result)
+		variables["result"] = strings.Join(names, " & ")
 
 		elems := slices.Clone(cfg.Elements)
 		for i := range elems {
@@ -85,8 +92,8 @@ func (c Config) Verify() error {
 }
 
 type List struct {
-	Freshmen []int `json:"freshmen"`
-	Seniors  []int `json:"seniors"`
+	Freshmen map[int]string
+	Seniors  map[int]string
 }
 
 func main() {
@@ -106,24 +113,59 @@ func main() {
 		return
 	}
 
-	listFile, err := os.ReadFile("./list.json")
+	list, err := LoadList("./list.json")
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		return
 	}
-	var list List
-	err = json.Unmarshal(listFile, &list)
-	if err != nil {
-		fmt.Printf("error: %v\n", err)
-		return
-	}
-	drawingData := drawing.MakeData(list.Freshmen, list.Seniors)
+
+	drawingData := drawing.MakeData(
+		slices.Collect(maps.Keys(list.Freshmen)),
+		slices.Collect(maps.Keys(list.Seniors)),
+	)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
 	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
 	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
-	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData))
+	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
 	http.Handle("/", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
+}
+
+func LoadList(filepath string) (List, error) {
+	listFile, err := os.ReadFile("./list.json")
+	if err != nil {
+		return List{}, err
+	}
+
+	var tmpList struct {
+		Freshmen map[string]string `json:"freshmen"`
+		Seniors  map[string]string `json:"seniors"`
+	}
+	err = json.Unmarshal(listFile, &tmpList)
+	if err != nil {
+		return List{}, err
+	}
+
+	list := List{
+		Freshmen: make(map[int]string, len(tmpList.Freshmen)),
+		Seniors:  make(map[int]string, len(tmpList.Freshmen)),
+	}
+	for key := range tmpList.Freshmen {
+		i, err := strconv.Atoi(key)
+		if err != nil {
+			continue
+		}
+		list.Freshmen[i] = tmpList.Freshmen[key]
+	}
+	for key := range tmpList.Seniors {
+		i, err := strconv.Atoi(key)
+		if err != nil {
+			continue
+		}
+		list.Seniors[i] = tmpList.Seniors[key]
+	}
+
+	return list, nil
 }
