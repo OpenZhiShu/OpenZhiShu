@@ -56,18 +56,18 @@
 	"result": {
 		"title": "result",
 		"body_color": "black",
-		"ratio": "2/1",
+		"ratio": "16/9",
 		"elements": [
 			{
 				"type": "image",
-				"content": "/static/images/Abstract_2-Overlay_logo.png",
-				"style": "width: 100%; height: 100%; object-fit: cover;"
+				"content": "/static/images/result.png",
+				"style": "width: 100%; height: 100%; object-fit: cover;",
+				"appear": 1000
 			},
 			{
 				"type": "video",
-				"content": "/static/videos/Galaxy Brain meme.webm",
+				"content": "/static/videos/unboxing.mp4",
 				"style": "width: 100%; height: 100%; object-fit: cover;",
-				"hide": 3600,
 				"autoplay": true,
 				"muted": true
 			},
@@ -75,14 +75,14 @@
 				"type": "variable",
 				"content": "result",
 				"style": "top: 20%; left: 10%; font-size: 5em; background: dimgray; color: lightgray;",
-				"appear": 3600
+				"appear": 8500
 			},
 			{
 				"type": "image",
 				"content": "/static/images/home_icon.png",
-				"style": "width: 10%; top: 5%; right: 5%;",
+				"style": "width: 5%; top: 5%; right: 5%;",
 				"link": "/",
-				"appear": 3600
+				"appear": 8500
 			}
 		]
 	}
