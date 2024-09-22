@@ -1,0 +1,28 @@
+body {
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	background: black;
+}
+
+.side-bar {
+	height: 100vh;
+	height: 100dvh;
+	position: sticky;
+	top: 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	padding: 1em;
+	color: lightgray;
+	background: dimgray;
+}
+
+.content {
+	height: 200dvh;
+	display: flex;
+	flex-direction: column;
+	padding: 1em;
+	color: lightgray;
+	background: black;
+}

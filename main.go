@@ -127,6 +127,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
 	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
 	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
+	http.HandleFunc("/settings", genHandleFunc("./assets/templates/settings.html", nil))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
 	http.Handle("/", http.NotFoundHandler())
 
