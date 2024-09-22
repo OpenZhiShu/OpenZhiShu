@@ -20,13 +20,13 @@ func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Re
 	return func(w http.ResponseWriter, r *http.Request) {
 		t, err := template.ParseFiles(filepath)
 		if err != nil {
-			fmt.Printf("eror: %g\n", err)
+			fmt.Printf("error: %g\n", err)
 			return
 		}
 
 		err = t.Execute(w, data)
 		if err != nil {
-			fmt.Printf("eror: %g\n", err)
+			fmt.Printf("error: %g\n", err)
 		}
 	}
 }

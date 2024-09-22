@@ -72,7 +72,7 @@ func (d *Data[T]) Draw(freshman T) ([]T, error) {
 	}
 
 	drawTimes := d.baseDrawTimes
-	if rand.Intn(int(d.waitingFreshmenCount)) < int(d.luckyCount) {
+	if rand.Intn(d.waitingFreshmenCount) < int(d.luckyCount) {
 		drawTimes++
 		d.luckyCount--
 	}
