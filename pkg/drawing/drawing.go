@@ -7,22 +7,6 @@ import (
 	"slices"
 )
 
-func test() {
-	freshmen := []int{1, 2, 3, 4, 5, 6, 7}
-	seniors := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	// seniors := []int{1, 2, 3, 4, 5, 6}
-	d := MakeData(freshmen, seniors)
-	fmt.Printf("waitingFreshmenCount: %v\n", d.waitingFreshmenCount)
-	fmt.Printf("luckyCount: %v\n", d.luckyCount)
-	fmt.Printf("seniorsPairedMax: %v\n", d.seniorsPairedMax)
-	fmt.Printf("baseDrawTimes: %v\n", d.baseDrawTimes)
-	fmt.Println("")
-	for _, v := range freshmen {
-		result, err := d.Draw(v)
-		fmt.Printf("%v: %v (%v)\n", v, result, err)
-	}
-}
-
 type Data[T comparable] struct {
 	results              map[T][]T
 	freshmen             []T
