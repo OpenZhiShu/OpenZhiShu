@@ -20,35 +20,28 @@ type Data[T comparable] struct {
 }
 
 func MakeData[T comparable](freshmen []T, seniors []T) Data[T] {
-	data := Data[T]{
-		results:              make(map[T][]T, len(freshmen)),
-		freshmen:             slices.Clone(freshmen),
-		seniors:              slices.Clone(seniors),
-		pairableSeniors:      slices.Clone(seniors),
-		seniorsPairedCount:   make(map[T]int, len(seniors)),
+	return Data[T]{
+		results:         make(map[T][]T, len(freshmen)),
+		freshmen:        slices.Clone(freshmen),
+		seniors:         slices.Clone(seniors),
+		pairableSeniors: slices.Clone(seniors),
+		seniorsPairedCount: maps.Collect(func(yield func(T, int) bool) {
+			for _, k := range seniors {
+				if !yield(k, 0) {
+					return
+				}
+			}
+		}),
 		waitingFreshmenCount: len(freshmen),
-		luckyCount:           0,
-		seniorsPairedMax:     len(freshmen) / len(seniors),
-		baseDrawTimes:        1,
+		luckyCount: func() int {
+			if len(seniors) > len(freshmen) {
+				return len(seniors) % len(freshmen)
+			}
+			return 0
+		}(),
+		seniorsPairedMax: len(freshmen)/len(seniors) + min(1, len(freshmen)%len(seniors)),
+		baseDrawTimes:    max(1, len(seniors)/len(freshmen)),
 	}
-
-	for _, value := range seniors {
-		data.seniorsPairedCount[value] = 0
-	}
-
-	if len(freshmen) < len(seniors) {
-		data.baseDrawTimes = len(seniors) / len(freshmen)
-	}
-
-	if len(seniors) > len(freshmen) {
-		data.luckyCount = len(seniors) % len(freshmen)
-	}
-
-	if len(freshmen)%len(seniors) != 0 {
-		data.seniorsPairedMax++
-	}
-
-	return data
 }
 
 func (d *Data[T]) Results() map[T][]T {
