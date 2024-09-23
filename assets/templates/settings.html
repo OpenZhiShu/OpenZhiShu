@@ -59,11 +59,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{range $k, $v := .List.Freshmen}}
+				{{range .List.Freshmen}}
 				<tr>
-					<td>{{$k}}</td>
-					<td>{{$v}}</td>
-					<td>{{index $.DrawingData.Results $k}}</td>
+					<td>{{.Number}}</td>
+					<td>{{.Name}}</td>
+					<td>
+					{{if $.DrawingData.Results.Contains .}}
+						{{$.DrawingData.Results.Index .}}
+					{{else}}
+						N/A
+					{{end}}
+					</td>
 				</tr>
 				{{end}}
 			</tbody>
@@ -85,11 +91,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{range $k, $v := .List.Seniors}}
+				{{range .List.Seniors}}
 				<tr>
-					<td>{{$k}}</td>
-					<td>{{$v}}</td>
-					<td>{{index $.DrawingData.ResultsBySenior $k}}</td>
+					<td>{{.Number}}</td>
+					<td>{{.Name}}</td>
+					<td>
+					{{if $.DrawingData.ResultsBySenior.Contains .}}
+						{{$.DrawingData.ResultsBySenior.Index .}}
+					{{else}}
+						N/A
+					{{end}}
+					</td>
 				</tr>
 				{{end}}
 			</tbody>

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-	"maps"
 	"net/http"
 	"os"
 	"slices"
@@ -31,25 +30,35 @@ func genHandleFunc(filepath string, data any) func(http.ResponseWriter, *http.Re
 	}
 }
 
-func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int], list *List) func(http.ResponseWriter, *http.Request) {
+type Person struct {
+	Number int    `json:"number"`
+	Name   string `json:"name"`
+}
+
+func (p Person) Key() int {
+	return p.Number
+}
+
+func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[Person, int], list *List) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		number, err := strconv.Atoi(r.PathValue("number"))
 		if err != nil {
 			return
 		}
-		result, err := drawingData.Draw(number)
+		result, err := drawingData.Draw(Person{Number: number})
 		if err != nil {
 			genHandleFunc("./assets/templates/error.html", err.Error())(w, r)
 			return
 		}
-		fmt.Printf("number: %v, result: %v, len: %v\n", number, result, len(drawingData.Results()))
+		fmt.Printf("number: %v, result: %+v, waiting: %v\n", number, result, drawingData.WaitingFreshmenCount())
 
 		SaveResults(drawingData.Results(), list)
 
 		names := make([]string, len(result))
 		for i, v := range result {
-			names[i] = list.Seniors[v]
+			names[i] = v.Name
 		}
+		// names := slices.Collect(slices.Values(result).Map(func(p Person) string { return p.Name }))
 
 		variables := map[string]string{}
 		variables["result"] = strings.Join(names, " & ")
@@ -94,8 +103,8 @@ func (c Config) Verify() error {
 }
 
 type List struct {
-	Freshmen map[int]string
-	Seniors  map[int]string
+	Freshmen []Person `json:"freshmen"`
+	Seniors  []Person `json:"seniors"`
 }
 
 func main() {
@@ -122,15 +131,15 @@ func main() {
 	}
 
 	drawingData := drawing.MakeData(
-		slices.Collect(maps.Keys(list.Freshmen)),
-		slices.Collect(maps.Keys(list.Seniors)),
+		list.Freshmen,
+		list.Seniors,
 	)
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
 	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
 	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
 	http.HandleFunc("/settings", genHandleFunc("./assets/templates/settings.html", struct {
-		DrawingData *drawing.Data[int]
+		DrawingData *drawing.Data[Person, int]
 		List        List
 	}{
 		&drawingData,
@@ -149,88 +158,27 @@ func LoadList(filepath string) (List, error) {
 		return List{}, err
 	}
 
-	var tmpList struct {
-		Freshmen []struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-		} `json:"freshmen"`
-		Seniors []struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-		} `json:"seniors"`
-	}
-	err = json.Unmarshal(listFile, &tmpList)
-	if err != nil {
-		return List{}, err
-	}
+	var list List
+	err = json.Unmarshal(listFile, &list)
 
-	list := List{
-		Freshmen: make(map[int]string, len(tmpList.Freshmen)),
-		Seniors:  make(map[int]string, len(tmpList.Freshmen)),
-	}
-	for _, freshman := range tmpList.Freshmen {
-		list.Freshmen[freshman.Number] = freshman.Name
-	}
-	for _, senior := range tmpList.Seniors {
-		list.Seniors[senior.Number] = senior.Name
-	}
-
-	return list, nil
+	return list, err
 }
 
-func SaveResults(results map[int][]int, list *List) error {
-	rs := make([]struct {
-		Number int    `json:"number"`
-		Name   string `json:"name"`
-		Paired []struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
+type result struct {
+	Number int      `json:"number"`
+	Name   string   `json:"name"`
+	Paired []Person `json:"paired"`
+}
+
+func SaveResults(results drawing.Results[Person, int], list *List) error {
+	rs := make([]result, 0, results.Len())
+	for _, v := range list.Freshmen {
+		if !results.Contains(v) {
+			continue
 		}
-	}, 0, len(results))
-	for k, v := range results {
-		rs = append(rs, struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-			Paired []struct {
-				Number int    `json:"number"`
-				Name   string `json:"name"`
-			}
-		}{
-			Number: k,
-			Name:   list.Freshmen[k],
-			Paired: slices.Collect(func(yield func(struct {
-				Number int    `json:"number"`
-				Name   string `json:"name"`
-			}) bool) {
-				for k := range slices.Values(v) {
-					if !yield(struct {
-						Number int    `json:"number"`
-						Name   string `json:"name"`
-					}{
-						Number: k,
-						Name:   list.Seniors[k],
-					}) {
-						return
-					}
-				}
-			}),
-		})
+		rs = append(rs, result{Number: v.Number, Name: v.Name, Paired: results.Index(v)})
 	}
-	slices.SortFunc(rs, func(a struct {
-		Number int    `json:"number"`
-		Name   string `json:"name"`
-		Paired []struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-		}
-	}, b struct {
-		Number int    `json:"number"`
-		Name   string `json:"name"`
-		Paired []struct {
-			Number int    `json:"number"`
-			Name   string `json:"name"`
-		}
-	}) int {
+	slices.SortFunc(rs, func(a result, b result) int {
 		return a.Number - b.Number
 	})
 	b, err := json.MarshalIndent(rs, "", "	")
