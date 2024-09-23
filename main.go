@@ -44,6 +44,8 @@ func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[int], lis
 		}
 		fmt.Printf("number: %v, result: %v, len: %v\n", number, result, len(drawingData.Results()))
 
+		SaveResults(drawingData.Results(), list)
+
 		names := make([]string, len(result))
 		for i, v := range result {
 			names[i] = list.Seniors[v]
@@ -135,6 +137,7 @@ func main() {
 		list,
 	}))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
+	http.HandleFunc("/results.json", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./results.json") })
 	http.Handle("/", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
@@ -173,4 +176,72 @@ func LoadList(filepath string) (List, error) {
 	}
 
 	return list, nil
+}
+
+func SaveResults(results map[int][]int, list *List) error {
+	rs := make([]struct {
+		Number int    `json:"number"`
+		Name   string `json:"name"`
+		Paired []struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+		}
+	}, 0, len(results))
+	for k, v := range results {
+		rs = append(rs, struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+			Paired []struct {
+				Number int    `json:"number"`
+				Name   string `json:"name"`
+			}
+		}{
+			Number: k,
+			Name:   list.Freshmen[k],
+			Paired: slices.Collect(func(yield func(struct {
+				Number int    `json:"number"`
+				Name   string `json:"name"`
+			}) bool) {
+				for k := range slices.Values(v) {
+					if !yield(struct {
+						Number int    `json:"number"`
+						Name   string `json:"name"`
+					}{
+						Number: k,
+						Name:   list.Seniors[k],
+					}) {
+						return
+					}
+				}
+			}),
+		})
+	}
+	slices.SortFunc(rs, func(a struct {
+		Number int    `json:"number"`
+		Name   string `json:"name"`
+		Paired []struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+		}
+	}, b struct {
+		Number int    `json:"number"`
+		Name   string `json:"name"`
+		Paired []struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+		}
+	}) int {
+		return a.Number - b.Number
+	})
+	b, err := json.MarshalIndent(rs, "", "	")
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile("./results.json", b, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
