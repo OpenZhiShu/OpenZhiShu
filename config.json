@@ -15,6 +15,12 @@
 				"style": "height: 75%; bottom: 0%; left: 0%"
 			},
 			{
+				"type": "image",
+				"content": "/static/images/settings_icon.svg",
+				"style": "width: 5%; top: 5%; right: 5%;",
+				"link": "/settings"
+			},
+			{
 				"type": "text",
 				"content": "START",
 				"style": "top: 50%; left: 70%; transform: translate(-50%, -50%); font-size: 5em; background: dimgray; color: lightgray;",
@@ -34,7 +40,7 @@
 			},
 			{
 				"type": "image",
-				"content": "/static/images/home_icon.png",
+				"content": "/static/images/home_icon.svg",
 				"style": "width: 5%; top: 5%; right: 5%;",
 				"link": "/"
 			},
@@ -79,7 +85,7 @@
 			},
 			{
 				"type": "image",
-				"content": "/static/images/home_icon.png",
+				"content": "/static/images/home_icon.svg",
 				"style": "width: 5%; top: 5%; right: 5%;",
 				"link": "/",
 				"appear": 8500
