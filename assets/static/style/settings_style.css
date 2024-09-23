@@ -1,4 +1,8 @@
 body {
+	width: 100vw;
+	width: 100dvw;
+	height: 100vh;
+	height: 100dvh;
 	display: flex;
 	flex-direction: row;
 	margin: 0;
@@ -6,23 +10,36 @@ body {
 }
 
 .side-bar {
-	height: 100vh;
-	height: 100dvh;
+	height: 100%;
 	position: sticky;
 	top: 0;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
-	padding: 1em;
+	padding: 1.2em;
 	color: lightgray;
 	background: dimgray;
 }
 
 .content {
-	height: 200dvh;
+	height: 100%;
+	box-sizing: border-box;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
-	padding: 1em;
+	padding: 2em;
 	color: lightgray;
 	background: black;
+	overflow-y: scroll;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th,
+td {
+	border: 0.1em solid lightgray;
+	padding: 0.2em 0.8em;
+	text-align: start;
 }

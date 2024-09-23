@@ -127,7 +127,13 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
 	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
 	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
-	http.HandleFunc("/settings", genHandleFunc("./assets/templates/settings.html", nil))
+	http.HandleFunc("/settings", genHandleFunc("./assets/templates/settings.html", struct {
+		DrawingData *drawing.Data[int]
+		List        List
+	}{
+		&drawingData,
+		list,
+	}))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
 	http.Handle("/", http.NotFoundHandler())
 
@@ -141,8 +147,14 @@ func LoadList(filepath string) (List, error) {
 	}
 
 	var tmpList struct {
-		Freshmen map[string]string `json:"freshmen"`
-		Seniors  map[string]string `json:"seniors"`
+		Freshmen []struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+		} `json:"freshmen"`
+		Seniors []struct {
+			Number int    `json:"number"`
+			Name   string `json:"name"`
+		} `json:"seniors"`
 	}
 	err = json.Unmarshal(listFile, &tmpList)
 	if err != nil {
@@ -153,19 +165,11 @@ func LoadList(filepath string) (List, error) {
 		Freshmen: make(map[int]string, len(tmpList.Freshmen)),
 		Seniors:  make(map[int]string, len(tmpList.Freshmen)),
 	}
-	for key := range tmpList.Freshmen {
-		i, err := strconv.Atoi(key)
-		if err != nil {
-			continue
-		}
-		list.Freshmen[i] = tmpList.Freshmen[key]
+	for _, freshman := range tmpList.Freshmen {
+		list.Freshmen[freshman.Number] = freshman.Name
 	}
-	for key := range tmpList.Seniors {
-		i, err := strconv.Atoi(key)
-		if err != nil {
-			continue
-		}
-		list.Seniors[i] = tmpList.Seniors[key]
+	for _, senior := range tmpList.Seniors {
+		list.Seniors[senior.Number] = senior.Name
 	}
 
 	return list, nil

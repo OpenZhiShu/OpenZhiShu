@@ -7,45 +7,104 @@
 
 <body>
 	<div class="side-bar">
-		<div>
+		<a href="#"><div>
 			<span>統計數據</span>
-		</div>
-		<div>
+		</div></a>
+		<a href="#"><div>
 			<span>新生名單</span>
-		</div>
-		<div>
+		</div></a>
+		<a href="#"><div>
 			<span>學長姐名單</span>
-		</div>
-		<div>
+		</div></a>
+		<a href="#"><div>
 			<span>操作</span>
-		</div>
+		</div></a>
 	</div>
 	<div class="content">
 		<h2>統計數據</h2>
-		<span>
-		    - 新生人數
-		    - 學長姐人數
-		    - 至少會抽到幾個學長姐
-		    - 學長姐最多抽到幾個新生
-		    - 剩多少新生還沒抽
-		    - 剩多少新生會多抽到一個學長姐
-		</span>
+		<div><table><tbody>
+			<tr>
+				<th>新生人數</th>
+				<td>{{len .List.Freshmen}}</td>
+			</tr>
+			<tr>
+				<th>學長姐人數</th>
+				<td>{{len .List.Seniors}}</td>
+			</tr>
+			<tr>
+				<th>剩多少新生還沒抽</th>
+				<td>{{.DrawingData.WaitingFreshmenCount}}</td>
+			</tr>
+			<tr>
+				<th>至少會抽到幾個學長姐</th>
+				<td>{{.DrawingData.BaseDrawTimes}}</td>
+			</tr>
+			<tr>
+				<th>學長姐最多抽到幾個新生</th>
+				<td>{{.DrawingData.SeniorsPairedMax}}</td>
+			</tr>
+			<tr>
+				<th>剩多少新生會多抽到一個學長姐</th>
+				<td>{{.DrawingData.LuckyCount}}</td>
+			</tr>
+		</tbody></table></div>
+
 		<h2>新生名單</h2>
+		<div><table>
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Name</th>
+					<th>Paired</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{range $k, $v := .List.Freshmen}}
+				<tr>
+					<td>{{$k}}</td>
+					<td>{{$v}}</td>
+					<td>{{index $.DrawingData.Results $k}}</td>
+				</tr>
+				{{end}}
+			</tbody>
+		</table></div>
 		<span>
 		    - 排序
 		    - 號碼
 		    - 姓名
 		    - 抽到的直屬 or N/A
 		</span>
+
 		<h2>學長姐名單</h2>
+		<div><table>
+			<thead>
+				<tr>
+					<th>Number</th>
+					<th>Name</th>
+					<th>Paired</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{range $k, $v := .List.Seniors}}
+				<tr>
+					<td>{{$k}}</td>
+					<td>{{$v}}</td>
+					<td>{{index $.DrawingData.ResultsBySenior $k}}</td>
+				</tr>
+				{{end}}
+			</tbody>
+		</table></div>
 		<span>
 		    - 號碼
 		    - 姓名
 		    - 抽到的直屬
 		</span>
+
 		<h2>操作</h2>
+		<a href="/results.json" download="results.json">
+			<span>下載結果</span>
+		</a>
 		<span>
-		    - 下載結果
 		    - 幫剩下的抽
 		    - 刪除記錄 (全部重抽)
 		</span>

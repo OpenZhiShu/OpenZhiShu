@@ -48,6 +48,32 @@ func (d *Data[T]) Results() map[T][]T {
 	return maps.Clone(d.results)
 }
 
+func (d *Data[T]) ResultsBySenior() map[T][]T {
+	results := make(map[T][]T, len(d.seniors))
+	for k, vs := range d.results {
+		for _, v := range vs {
+			results[v] = append(results[v], k)
+		}
+	}
+	return results
+}
+
+func (d *Data[T]) WaitingFreshmenCount() int {
+	return d.waitingFreshmenCount
+}
+
+func (d *Data[T]) BaseDrawTimes() int {
+	return d.baseDrawTimes
+}
+
+func (d *Data[T]) SeniorsPairedMax() int {
+	return d.seniorsPairedMax
+}
+
+func (d *Data[T]) LuckyCount() int {
+	return d.luckyCount
+}
+
 func (d *Data[T]) Finished() bool {
 	return d.waitingFreshmenCount == 0
 }
