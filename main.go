@@ -141,7 +141,7 @@ func main() {
 }
 
 func LoadList(filepath string) (List, error) {
-	listFile, err := os.ReadFile("./list.json")
+	listFile, err := os.ReadFile(filepath)
 	if err != nil {
 		return List{}, err
 	}
