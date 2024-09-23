@@ -3,24 +3,38 @@
 
 <head>
 	<link rel="stylesheet" href="/static/style/settings_style.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
 
 <body>
 	<div class="side-bar">
-		<a href="#numbers"><div>
+		<a href="#numbers" class="side-bar-item"><div>
 			<span>統計數據</span>
 		</div></a>
-		<a href="#freshmen-list"><div>
+		<a href="#freshmen-list" class="side-bar-item"><div>
 			<span>新生名單</span>
 		</div></a>
-		<a href="#seniors-list"><div>
+		<a href="#seniors-list" class="side-bar-item"><div>
 			<span>學長姐名單</span>
 		</div></a>
-		<a href="#operation"><div>
+		<a href="#operation" class="side-bar-item"><div>
 			<span>操作</span>
 		</div></a>
 	</div>
 	<div class="content">
+		<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+			<h1>Settings</h1>
+			<a href="/" style="text-decoration: none;">
+				<div style="padding: 0.6em; display: flex; flex-direction: row; align-items: center; color: lightgray;">
+					<span class="material-symbols-rounded">
+						home
+					</span>
+					<div style="width: 0.6em;"></div>
+					<span>Home</span>
+				</div>
+			</a>
+		</div>
+
 		<h2 id="numbers">統計數據</h2>
 		<div><table><tbody>
 			<tr>
@@ -74,12 +88,6 @@
 				{{end}}
 			</tbody>
 		</table></div>
-		<span>
-		    - 排序
-		    - 號碼
-		    - 姓名
-		    - 抽到的直屬 or N/A
-		</span>
 
 		<h2 id="seniors-list">學長姐名單</h2>
 		<div><table>
@@ -106,20 +114,13 @@
 				{{end}}
 			</tbody>
 		</table></div>
-		<span>
-		    - 號碼
-		    - 姓名
-		    - 抽到的直屬
-		</span>
 
 		<h2 id="operation">操作</h2>
 		<a href="/results.json" download="results.json">
 			<span>下載結果</span>
 		</a>
-		<span>
-		    - 幫剩下的抽
-		    - 刪除記錄 (全部重抽)
-		</span>
+		<span>幫剩下的抽</span>
+		<span>刪除記錄 (全部重抽)</span>
 	</div>
 </body>
 
