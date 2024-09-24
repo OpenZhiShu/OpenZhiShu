@@ -11,21 +11,19 @@ type Person[T comparable] interface {
 	Key() T
 }
 
-type Results[P Person[T], T comparable] struct {
-	results map[T][]P
-}
+type Results[P Person[T], T comparable] map[T][]P
 
 func (r Results[P, T]) Index(person P) []P {
-	return r.results[person.Key()]
+	return r[person.Key()]
 }
 
 func (r Results[P, T]) Contains(person P) bool {
-	_, contains := r.results[person.Key()]
+	_, contains := r[person.Key()]
 	return contains
 }
 
-func (r *Results[P, T]) Len() int {
-	return len(r.results)
+func (r Results[P, T]) Len() int {
+	return len(r)
 }
 
 type Data[P Person[T], T comparable] struct {
@@ -42,7 +40,7 @@ type Data[P Person[T], T comparable] struct {
 
 func MakeData[P Person[T], T comparable](freshmen []P, seniors []P) Data[P, T] {
 	return Data[P, T]{
-		results:              Results[P, T]{make(map[T][]P, len(freshmen))},
+		results:              make(map[T][]P, len(freshmen)),
 		freshmen:             slices.Clone(freshmen),
 		seniors:              slices.Clone(seniors),
 		pairableSeniors:      slices.Clone(seniors),
@@ -60,12 +58,12 @@ func MakeData[P Person[T], T comparable](freshmen []P, seniors []P) Data[P, T] {
 }
 
 func (d *Data[P, T]) Results() Results[P, T] {
-	return Results[P, T]{maps.Clone(d.results.results)}
+	return maps.Clone(d.results)
 }
 
 func (d *Data[P, T]) ResultsBySenior() Results[P, T] {
-	results := Results[P, T]{make(map[T][]P, len(d.seniors))}
-	for k, vs := range d.results.results {
+	results := make(map[T][]P, len(d.seniors))
+	for k, vs := range d.results {
 		var freshman P
 		for _, f := range d.freshmen {
 			if f.Key() == k {
@@ -74,7 +72,7 @@ func (d *Data[P, T]) ResultsBySenior() Results[P, T] {
 			}
 		}
 		for _, v := range vs {
-			results.results[v.Key()] = append(results.results[v.Key()], freshman)
+			results[v.Key()] = append(results[v.Key()], freshman)
 		}
 	}
 	return results
@@ -142,7 +140,7 @@ func (d *Data[P, T]) Draw(freshman P) ([]P, error) {
 		}
 	}
 
-	d.results.results[freshman.Key()] = result
+	d.results[freshman.Key()] = result
 	d.waitingFreshmenCount--
 
 	return result, nil
