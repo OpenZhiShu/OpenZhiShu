@@ -79,6 +79,11 @@ element
     - type: `variable`
     - content: string  
         變數的名稱
+    - prefix: string  
+        前綴，加在變數值的前面
+    - suffix: string  
+        後綴，加在變數值的後面
+
 - input  
     輸入欄位, 詳見[說明](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
     - type: `input`

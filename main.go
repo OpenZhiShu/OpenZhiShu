@@ -54,27 +54,41 @@ func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[Person, i
 
 		SaveResults(drawingData.Results(), list)
 
-		names := make([]string, len(result))
-		for i, v := range result {
-			names[i] = v.Name
-		}
+		names := slices.Collect(func(yield func(string) bool) {
+			for _, v := range result {
+				if !yield(v.Name) {
+					return
+				}
+			}
+		})
 		// names := slices.Collect(slices.Values(result).Map(func(p Person) string { return p.Name }))
 
 		variables := map[string]string{}
 		variables["result"] = strings.Join(names, " & ")
+		variables["result_number"] = strings.Join(slices.Collect(func(yield func(string) bool) {
+			for _, v := range result {
+				if !yield(strconv.Itoa(v.Number)) {
+					return
+				}
+			}
+		}), " & ")
 
 		elems := slices.Clone(cfg.Elements)
 		for i := range elems {
 			if elems[i].Type != "variable" {
 				continue
 			}
-			elems[i].Type = "text"
+			elems[i].Type = elems[i].Other["to_type"].(string)
+
 			value, inMap := variables[elems[i].Content]
 			if !inMap {
+				elems[i].Type = "text"
 				elems[i].Content = fmt.Sprintf("no variable `%v`", elems[i].Content)
 				continue
 			}
-			elems[i].Content = value
+			prefix, _ := elems[i].Other["prefix"].(string)
+			suffix, _ := elems[i].Other["suffix"].(string)
+			elems[i].Content = prefix + value + suffix
 		}
 
 		newCfg := config.Config{BodyColor: cfg.BodyColor, Ratio: cfg.Ratio, Elements: elems}
