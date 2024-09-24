@@ -174,8 +174,7 @@ func LoadList(filepath string) (List, error) {
 }
 
 type result struct {
-	Number int      `json:"number"`
-	Name   string   `json:"name"`
+	Person
 	Paired []Person `json:"paired"`
 }
 
@@ -185,7 +184,7 @@ func SaveResults(results drawing.Results[Person, int], list *List) error {
 		if !results.Contains(v) {
 			continue
 		}
-		rs = append(rs, result{Number: v.Number, Name: v.Name, Paired: results.Index(v)})
+		rs = append(rs, result{Person: Person{Number: v.Number, Name: v.Name}, Paired: results.Index(v)})
 	}
 	slices.SortFunc(rs, func(a result, b result) int {
 		return a.Number - b.Number
