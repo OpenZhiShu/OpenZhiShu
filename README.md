@@ -1,16 +1,99 @@
 # OpenZhiShu
 
-## List
+OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
+- 明確的名單檔案, 非常低的使用門檻
+- 以網頁構造的UI, 提供良好的跨平台支援性
+- 簡單的設定檔, 具備高度可自訂性
 
-`list.json`
+---
 
-- freshmen: []person
-- seniors: []person
+## 使用方法
 
-### person
+**NOTE:** 請至少閱讀本段落以確保程式執行預期內的行為, 如果還想要自訂畫面, 則請閱讀[Config](#config)段落  
 
-- number: int
-- name: string
+### 準備階段
+
+首先, 我們有一些必要的檔案要下載和編譯
+1. 最簡單的方法是使用
+    ```
+    git clone https://github.com/OpenZhiShu/OpenZhiShu.git
+    ```
+    將這個倉庫下載到本地, 並使用
+    ```
+    go build
+    ```
+    編譯原始碼
+
+2. 若你的環境沒有且不想安裝git或go, 可以參考以下做法:
+    - 沒有git:  
+        從GitHub的Download ZIP功能直接下載最新版本, ~或是前往Releases頁面下載特定版本的壓縮檔~
+    - 沒有go:  
+        ~前往Releases頁面下載編譯完成的可執行檔, 並將其放入專案的目錄中~
+
+準備完成後, 應該會有一個類似這樣的目錄結構:
+```
+├─ assets/
+|  ├─ static/    # 裡面的檔案能透過`/static/paht/to/file`存取
+|  └─ templates/
+├─ pkg/
+├─ .gitignore
+├─ README.md
+├─ main.go
+├─ OpenZhiShu    # 編譯後產生的可執行檔, 在Windows環境則為OpenZhiShu.exe
+├─ list.json     # 儲存名單的檔案
+├─ config.json   # 設定檔, 修改前請參考Config段落
+└─ results.json  # 儲存結果的檔案, 每次使用都會覆蓋它的內容
+```
+
+### 名單
+
+名單應儲存在`list.json`中, 有兩個欄位`freshmen`代表新生和`seniors`代表學長姊  
+這個範例應該能說明一切:
+
+```json
+{
+    "freshmen": [
+        {
+            "number": 1,
+            "name": "王小名"
+        },
+        {
+            "number": 2,
+            "name": "王大名"
+        }
+    ],
+    "seniors": [
+        {
+            "number": 1,
+            "name": "王中名"
+        }
+    ]
+}
+```
+
+### 開始使用
+
+只差最後一步了! 運行`OpenZhiShu`(或是OpenZhiShu.exe如果在Windows環境), 你應該會看到一個訊息
+```
+$ ./OpenZhiShu
+choose a port to listen: 
+```
+在這裡, 你應該選擇一個通訊埠(port)使用, 在以下的範例中, 將以8080作為代表
+```
+$ ./OpenZhiShu
+choose a port to listen: 8080
+http://localhost:8080
+```
+到了這裡, 你就可以打開你最愛的瀏覽器並前往它提供的網址`http://localhost:8080`了!
+
+### 主要頁面
+
+- 主頁 `/`
+- 準備 `/drawing`
+- 結果 `/result/{number}`
+- 設定畫面 `settings`
+    - 下載結果  
+      **NOTE:** 不要把它存到目錄中的`results.json`, 因為它會被新的結果覆蓋
 
 ## Config
 
@@ -75,14 +158,15 @@ element
     - content: string  
         顯示的文字內容
 - variable  
-    能取的變數的值並顯示在一個"text"中
+    轉換成`to_type`的元素, 並取得變數後放入`content`
     - type: `variable`
     - content: string  
         變數的名稱
+    - to_type: string
     - prefix: string  
-        前綴，加在變數值的前面
+        前綴, 加在變數值的前面
     - suffix: string  
-        後綴，加在變數值的後面
+        後綴, 加在變數值的後面
 
 - input  
     輸入欄位, 詳見[說明](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
