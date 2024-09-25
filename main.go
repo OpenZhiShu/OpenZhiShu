@@ -63,15 +63,10 @@ func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[Person, i
 		})
 		// names := slices.Collect(slices.Values(result).Map(func(p Person) string { return p.Name }))
 
-		variables := map[string]string{}
-		variables["result"] = strings.Join(names, " & ")
-		variables["result_number"] = strings.Join(slices.Collect(func(yield func(string) bool) {
-			for _, v := range result {
-				if !yield(strconv.Itoa(v.Number)) {
-					return
-				}
-			}
-		}), " & ")
+		variables := map[string]string{
+			"result":        strings.Join(names, " & "),
+			"result_number": strconv.Itoa(result[0].Number),
+		}
 
 		elems := slices.Clone(cfg.Elements)
 		for i := range elems {

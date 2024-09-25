@@ -80,17 +80,18 @@
 			{
 				"type": "variable",
 				"content": "result",
-				"style": "top: 20%; left: 10%; font-size: 5em; background: dimgray; color: lightgray;",
+				"style": "top: 5%; left: 50%; transform: translate(-50%, 0); font-size: 3em; background: dimgray; color: lightgray;",
 				"appear": 8500,
 				"to_type": "text"
 			},
 			{
 				"type": "variable",
 				"content": "result_number",
-				"style": "top: 0%; left: 0%; background: dimgray; color: lightgray;",
+				"style": "width: 25%; top: 35%; left: 50%; transform: translate(-50%, 0); aspect-ratio: 1; object-fit: cover;",
 				"appear": 8500,
-				"to_type": "text",
-				"prefix": "/images/photo/"
+				"to_type": "image",
+				"prefix": "/static/images/photo/",
+				"suffix": ".png"
 			},
 			{
 				"type": "image",
