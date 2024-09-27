@@ -145,3 +145,7 @@ func (d *Data[P, T]) Draw(freshman P) ([]P, error) {
 
 	return result, nil
 }
+
+func (d *Data[P, T]) Reset() {
+	*d = MakeData(d.freshmen, d.seniors)
+}
