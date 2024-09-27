@@ -5,10 +5,16 @@ import (
 	"testing"
 )
 
+type person int
+
+func (p person) Key() int {
+	return int(p)
+}
+
 func TestMakeData(t *testing.T) {
 	{
-		freshmen := []int{1, 2, 3, 4, 5, 6, 7}
-		seniors := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+		freshmen := []person{1, 2, 3, 4, 5, 6, 7}
+		seniors := []person{1, 2, 3, 4, 5, 6, 7, 8, 9}
 		d := MakeData(freshmen, seniors)
 
 		luckyCount := 2
@@ -46,8 +52,8 @@ func TestMakeData(t *testing.T) {
 		}
 	}
 	{
-		freshmen := []int{1, 2, 3, 4, 5, 6, 7}
-		seniors := []int{1, 2, 3}
+		freshmen := []person{1, 2, 3, 4, 5, 6, 7}
+		seniors := []person{1, 2, 3}
 		d := MakeData(freshmen, seniors)
 
 		luckyCount := 0
