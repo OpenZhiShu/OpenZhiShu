@@ -46,14 +46,9 @@ func MakeData[P Person[T], T comparable](freshmen []P, seniors []P) Data[P, T] {
 		pairableSeniors:      slices.Clone(seniors),
 		seniorsPairedCount:   make(map[T]int, len(seniors)),
 		waitingFreshmenCount: len(freshmen),
-		luckyCount: func() int {
-			if len(seniors) > len(freshmen) {
-				return len(seniors) % len(freshmen)
-			}
-			return 0
-		}(),
-		seniorsPairedMax: len(freshmen)/len(seniors) + min(1, len(freshmen)%len(seniors)),
-		baseDrawTimes:    max(1, len(seniors)/len(freshmen)),
+		luckyCount:           (len(seniors) % len(freshmen)) % len(seniors),
+		seniorsPairedMax:     len(freshmen)/len(seniors) + min(1, len(freshmen)%len(seniors)),
+		baseDrawTimes:        max(1, len(seniors)/len(freshmen)),
 	}
 }
 
