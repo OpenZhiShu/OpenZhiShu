@@ -17,13 +17,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	padding: 0.6em 1.2em;
-	color: lightgray;
 	background: dimgray;
 }
 
 .side-bar-item {
 	padding: 0.2em;
-	color: currentColor;
+	color: lightgray !important;
 	text-decoration: none;
 }
 
@@ -37,6 +36,11 @@ body {
 	color: lightgray;
 	background: black;
 	overflow-y: scroll;
+}
+
+a:link,
+a:visited {
+	color: lightblue;
 }
 
 table {
