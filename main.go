@@ -155,7 +155,7 @@ func main() {
 		list,
 	}))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
-	http.HandleFunc("/results.json", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./results.json") })
+	http.HandleFunc("/results/results.json", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./results.json") })
 	http.Handle("/", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
