@@ -156,6 +156,15 @@ func main() {
 	}))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
 	http.HandleFunc("/results/results.json", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./results.json") })
+	http.HandleFunc("PUT /drawing/all", func(w http.ResponseWriter, r *http.Request) {
+		drawingData.DrawAll()
+		SaveResults(drawingData.Results(), &list)
+		w.Header().Add("HX-Refresh", "true")
+	})
+	http.HandleFunc("DELETE /results/delete", func(w http.ResponseWriter, r *http.Request) {
+		drawingData.Reset()
+		w.Header().Add("HX-Refresh", "true")
+	})
 	http.Handle("/", http.NotFoundHandler())
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))

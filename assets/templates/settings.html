@@ -2,6 +2,7 @@
 <html>
 
 <head>
+	<script src="https://unpkg.com/htmx.org@2.0.2"></script>
 	<link rel="stylesheet" href="/static/style/settings_style.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
 </head>
@@ -119,8 +120,8 @@
 		<a href="/results/results.json" download="results.json">
 			<span>下載結果</span>
 		</a>
-		<span>幫剩下的抽</span>
-		<span>刪除記錄 (全部重抽)</span>
+		<span hx-put="/drawing/all" hx-trigger="click">幫剩下的抽</span>
+		<span hx-delete="/results/delete" hx-trigger="click">刪除記錄 (全部重抽)</span>
 	</div>
 </body>
 
