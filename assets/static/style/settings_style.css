@@ -17,7 +17,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	padding: 0.6em 1.2em;
-	background: dimgray;
+	background: #232430;
 }
 
 .side-bar-item {
