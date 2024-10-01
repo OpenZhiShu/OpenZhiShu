@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"os"
 	"reflect"
+	"strings"
 )
 
 type Renderable interface {
@@ -91,10 +92,23 @@ func (e *Element) UnmarshalJSON(data []byte) error {
 			continue
 		}
 
-		key := t.Field(i).Tag.Get("json")
-		if reflect.TypeOf(e.Other[key]) != reflect.TypeOf(nil) {
-			v.Field(i).Set(reflect.ValueOf(e.Other[key]).Convert(t.Field(i).Type))
+		tag := t.Field(i).Tag.Get("json")
+		if tag == "-" {
+			continue
 		}
+
+		key, _, _ := strings.Cut(tag, ",")
+		value, inMap := e.Other[key]
+		if !inMap {
+			continue
+		}
+
+		reflectValue := reflect.ValueOf(value)
+		if !reflectValue.CanConvert(t.Field(i).Type) {
+			continue
+		}
+
+		v.Field(i).Set(reflectValue.Convert(t.Field(i).Type))
 		delete(e.Other, key)
 	}
 	return nil
