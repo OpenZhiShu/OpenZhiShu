@@ -9,7 +9,7 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 
 ## 使用方法
 
-**NOTE:** 請至少閱讀本段落以確保程式執行預期內的行為, 如果還想要自訂畫面, 則請閱讀[Config](#config)段落  
+> **NOTE:** 請至少閱讀本段落以確保程式執行預期內的行為, 如果還想要自訂畫面, 則請閱讀[Config](#config)段落  
 
 ### 準備階段
 
@@ -78,7 +78,7 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 $ ./OpenZhiShu
 choose a port to listen: 
 ```
-在這裡, 你應該選擇一個通訊埠(port)使用, 在以下的範例中, 將以8080作為代表
+在這裡, 你應該選擇一個通訊埠(port)使用, 例如輸入`8080`
 ```
 $ ./OpenZhiShu
 choose a port to listen: 8080
@@ -97,11 +97,16 @@ http://localhost:8080
 
 ## Config
 
-`config.json`
+> **推薦:** 先[Fork](https://github.com/OpenZhiShu/OpenZhiShu/fork)這個倉庫, 並修改你自己的副本, 這樣就能儲存你做出的更動
 
+自訂畫面需要修改`config.json`檔, 其中應該有幾個欄位:
 - homepage: page
 - drawing: page
 - result: page
+
+> **NOTE:** 修改後需要重新執行`./OpenZhiShu`才會套用新的設定
+
+> **NOTE:** 在`/assets/static/`中的檔案可以透過`/static`存取, 例如一個圖片在`/assets/static/image.png`, 可以使用`{ "type": "image", "content": "/static/image.png" }`
 
 ### 頁面
 
