@@ -26,6 +26,10 @@ body {
 	position: absolute;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 .hide {
 	display: none;
 }

@@ -1,7 +1,7 @@
 {{with .Value}}
 <video
 	id="element-{{$.Index}}"
-	class="element{{if ne .Appear 0}} hide{{end}}"
+	class="element{{if ne .Link ""}} pointer{{end}}{{if ne .Appear 0}} hide{{end}}"
 	{{if ne .Link ""}}onclick="window.location.href='{{.Link}}'"{{end}}
 	style="{{.Style}}"
 	{{if .Other.autoplay}}autoplay {{end}}{{if .Other.loop}}loop {{end}}{{if .Other.muted}}muted {{end}}>

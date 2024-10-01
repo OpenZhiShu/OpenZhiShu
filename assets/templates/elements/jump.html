@@ -1,7 +1,7 @@
 {{with .Value}}
 <button 
 	id="element-{{$.Index}}"
-	class="element{{if ne .Appear 0}} hide{{end}}"
+	class="element{{if ne .Link ""}} pointer{{end}}{{if ne .Appear 0}} hide{{end}}"
 	onclick="window.location.href = `{{.Other.url_prefix}}${document.getElementById('{{.Other.target}}').value}`"
 	style="{{.Style}}">
 	{{.Content}}
