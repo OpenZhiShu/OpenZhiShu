@@ -127,13 +127,13 @@ func main() {
 	}
 	fmt.Printf("http://localhost:%v\n", port)
 
-	cfg, err := config.LoadConfig[Config]("./config.json")
+	cfg, err := config.LoadConfig[Config]("./configs/config.json")
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		return
 	}
 
-	list, err := LoadList("./list.json")
+	list, err := LoadList("./configs/list.json")
 	if err != nil {
 		fmt.Printf("error: %v\n", err)
 		return
@@ -144,7 +144,8 @@ func main() {
 		list.Seniors,
 	)
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./assets/static"))))
+	http.Handle("/style/", http.StripPrefix("/style/", http.FileServer(http.Dir("./assets/style"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./configs/static"))))
 	http.HandleFunc("/{$}", genHandleFunc("./assets/templates/page.html", cfg.HomepageConfig))
 	http.HandleFunc("/drawing", genHandleFunc("./assets/templates/page.html", cfg.DrawingConfig))
 	http.HandleFunc("/settings", genHandleFunc("./assets/templates/settings.html", struct {
