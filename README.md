@@ -14,17 +14,20 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 ### 準備階段
 
 首先, 我們有一些必要的檔案要下載和編譯
-1. 最簡單的方法是使用
+1. 最簡單的方法是使用Git將這個倉庫下載到本地:
     ```
     git clone https://github.com/OpenZhiShu/OpenZhiShu.git
     ```
-    將這個倉庫下載到本地, 並使用
+    然後`cd`進入該資料夾:
+    ```
+    cd OpenZhiShu
+    ```
+    並使用Go將原始碼編譯為可執行檔:
     ```
     go build
     ```
-    將原始碼編譯為可執行檔
 
-2. 若你的環境沒有且不想安裝git或go, 可以參考以下做法:
+3. 若你的環境沒有且不想安裝git或go, 可以參考以下做法:
     - 沒有git:  
         從GitHub的Download ZIP功能直接下載最新版本, ~或是前往Releases頁面下載特定版本的壓縮檔~
     - 沒有go:  
@@ -33,21 +36,21 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 準備完成後, 應該會有一個類似這樣的目錄結構:
 ```
 ├─ assets/
-|  ├─ static/    # 裡面的檔案能透過`/static/paht/to/file`存取
-|  └─ templates/
 ├─ pkg/
+├─ configs/
+|  ├─ static/      # 裡面的檔案能透過`/static/path/to/file`存取
+|  ├─ config.json  # 設定檔, 修改前請參考Config段落
+|  └─ list.json    # 儲存名單的檔案
 ├─ .gitignore
 ├─ README.md
 ├─ main.go
-├─ OpenZhiShu    # 編譯後產生的可執行檔, 在Windows環境則為OpenZhiShu.exe
-├─ list.json     # 儲存名單的檔案
-├─ config.json   # 設定檔, 修改前請參考Config段落
-└─ results.json  # 儲存結果的檔案, 每次使用都會覆蓋它的內容
+├─ OpenZhiShu      # 編譯後產生的可執行檔, 在Windows環境則為OpenZhiShu.exe
+└─ results.json    # 儲存結果的檔案, 每次使用都會覆蓋它的內容
 ```
 
 ### 名單
 
-名單應儲存在`list.json`中, 有兩個欄位`freshmen`代表新生和`seniors`代表學長姊  
+名單應儲存在`./configs/list.json`中, 有兩個欄位`freshmen`代表新生和`seniors`代表學長姊  
 這個範例應該能說明一切:
 
 ```json
@@ -93,20 +96,20 @@ http://localhost:8080
 - 結果 `/result/{number}`
 - 設定畫面 `settings`
     - 下載結果  
-      **NOTE:** 不要把它存到目錄中的`results.json`, 因為它會被新的結果覆蓋
+      **NOTE:** 不要把它存到目錄中的`./results.json`, 因為它會被新的結果覆蓋
 
 ## Config
 
 > **推薦:** 先[Fork](https://github.com/OpenZhiShu/OpenZhiShu/fork)這個倉庫, 並修改你自己的副本, 這樣就能儲存你做出的更動
 
-自訂畫面需要修改`config.json`檔, 其中應該有幾個欄位:
+自訂畫面需要修改`./configs/config.json`檔, 其中應該有幾個欄位:
 - homepage: page
 - drawing: page
 - result: page
 
 > **NOTE:** 修改後需要重新執行`./OpenZhiShu`才會套用新的設定
 
-> **NOTE:** 在`/assets/static/`中的檔案可以透過`/static`存取, 例如一個圖片在`/assets/static/image.png`, 可以使用`{ "type": "image", "content": "/static/image.png" }`
+> **NOTE:** 在`./configs/static/`中的檔案可以透過`/static`存取, 例如一個圖片在`./configs/static/image.png`, 可以使用`{ "type": "image", "content": "/static/image.png" }`
 
 ### 頁面
 
@@ -150,11 +153,11 @@ element
 - image
     - type: `image`
     - content: string  
-        圖片的網址, 例如: `https://path.to.img`, 或在`./assets/static/`中的圖片, 例如: `/static/images/image.png`
+        圖片的網址, 例如: `https://path.to.img`, 或在`./configs/static/`中的圖片, 例如: `/static/images/image.png`
 - video
     - type: `video`
     - content: string  
-        影片的網址, 例如: `https://path.to.video`, 或在`./assets/static/`中的影片, 例如: `/static/videos/video.mp4`
+        影片的網址, 例如: `https://path.to.video`, 或在`./configs/static/`中的影片, 例如: `/static/videos/video.mp4`
     - autoplay: bool
     - loop: bool
     - muted: bool
