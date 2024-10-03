@@ -38,11 +38,12 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 ├─ assets/
 ├─ pkg/
 ├─ configs/
-|  ├─ static/      # 裡面的檔案能透過`/static/path/to/file`存取
-|  ├─ config.json  # 設定檔, 修改前請參考Config段落
-|  └─ list.json    # 儲存名單的檔案
+│  ├─ static/      # 裡面的檔案能透過`/static/path/to/file`存取
+│  ├─ config.json  # 設定檔, 修改前請參考Config段落
+│  └─ list.json    # 儲存名單的檔案
 ├─ .gitignore
 ├─ README.md
+├─ go.mod
 ├─ main.go
 ├─ OpenZhiShu      # 編譯後產生的可執行檔, 在Windows環境則為OpenZhiShu.exe
 └─ results.json    # 儲存結果的檔案, 每次使用都會覆蓋它的內容
