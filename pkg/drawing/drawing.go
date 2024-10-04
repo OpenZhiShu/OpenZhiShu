@@ -13,19 +13,6 @@ type Person[T comparable] interface {
 
 type Results[P Person[T], T comparable] map[T][]P
 
-func (r Results[P, T]) Index(person P) []P {
-	return r[person.Key()]
-}
-
-func (r Results[P, T]) Contains(person P) bool {
-	_, contains := r[person.Key()]
-	return contains
-}
-
-func (r Results[P, T]) Len() int {
-	return len(r)
-}
-
 type Data[P Person[T], T comparable] struct {
 	results              Results[P, T]
 	freshmen             []P
@@ -95,7 +82,7 @@ func (d *Data[P, T]) Finished() bool {
 
 func (d *Data[P, T]) DrawAll() (Results[P, T], error) {
 	for _, freshman := range d.freshmen {
-		_, err := d.Draw(freshman)
+		_, err := d.Draw(freshman.Key())
 		if err != nil {
 			return Results[P, T]{}, nil
 		}
@@ -103,13 +90,13 @@ func (d *Data[P, T]) DrawAll() (Results[P, T], error) {
 	return d.Results(), nil
 }
 
-func (d *Data[P, T]) Draw(freshman P) ([]P, error) {
-	if !slices.ContainsFunc(d.freshmen, func(p P) bool { return p.Key() == freshman.Key() }) {
-		return []P{}, fmt.Errorf("freahman '%v' not in fresh list", freshman)
+func (d *Data[P, T]) Draw(key T) ([]P, error) {
+	if !slices.ContainsFunc(d.freshmen, func(p P) bool { return p.Key() == key }) {
+		return []P{}, fmt.Errorf("freahman key='%v' not in fresh list", key)
 	}
 
-	if d.results.Contains(freshman) {
-		return d.results.Index(freshman), nil
+	if result, inMap := d.results[key]; inMap {
+		return result, nil
 	}
 
 	drawTimes := d.baseDrawTimes
@@ -135,7 +122,7 @@ func (d *Data[P, T]) Draw(freshman P) ([]P, error) {
 		}
 	}
 
-	d.results[freshman.Key()] = result
+	d.results[key] = result
 	d.waitingFreshmenCount--
 
 	return result, nil

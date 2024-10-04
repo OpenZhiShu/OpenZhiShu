@@ -45,7 +45,7 @@ func genDrawingHandleFunc(cfg config.Config, drawingData *drawing.Data[Person, i
 		if err != nil {
 			return
 		}
-		result, err := drawingData.Draw(Person{Number: number})
+		result, err := drawingData.Draw(number)
 		if err != nil {
 			genHandleFunc("./assets/templates/error.html", err.Error())(w, r)
 			return
@@ -189,12 +189,13 @@ type result struct {
 }
 
 func SaveResults(results drawing.Results[Person, int], list *List) error {
-	rs := make([]result, 0, results.Len())
+	rs := make([]result, 0, len(results))
 	for _, v := range list.Freshmen {
-		if !results.Contains(v) {
+		paired, inMap := results[v.Key()]
+		if !inMap {
 			continue
 		}
-		rs = append(rs, result{Person: Person{Number: v.Number, Name: v.Name}, Paired: results.Index(v)})
+		rs = append(rs, result{Person: Person{Number: v.Number, Name: v.Name}, Paired: paired})
 	}
 	slices.SortFunc(rs, func(a result, b result) int {
 		return a.Number - b.Number
