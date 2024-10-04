@@ -79,8 +79,8 @@
 					<td>{{.Number}}</td>
 					<td>{{.Name}}</td>
 					<td>
-					{{if $.DrawingData.Results.Contains .}}
-						{{$.DrawingData.Results.Index .}}
+					{{with index $.DrawingData.Results .Key}}
+						{{.}}
 					{{else}}
 						N/A
 					{{end}}
@@ -105,8 +105,8 @@
 					<td>{{.Number}}</td>
 					<td>{{.Name}}</td>
 					<td>
-					{{if $.DrawingData.ResultsBySenior.Contains .}}
-						{{$.DrawingData.ResultsBySenior.Index .}}
+					{{with index $.DrawingData.ResultsBySenior .Key}}
+						{{.}}
 					{{else}}
 						N/A
 					{{end}}
