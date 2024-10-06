@@ -166,7 +166,10 @@ func main() {
 		drawingData.Reset()
 		w.Header().Add("HX-Refresh", "true")
 	})
-	http.Handle("/", http.NotFoundHandler())
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		genHandleFunc("./assets/templates/error.html", fmt.Sprintf("Sorry, the page `%v` could not be found.", r.URL.Path))(w, r)
+	})
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }
