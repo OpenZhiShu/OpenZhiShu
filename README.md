@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="/assets/banner-big.png" height="160" alt="OpenZhiShu">
+    <img src="/assets/banner-big.png" alt="OpenZhiShu">
 </div>
 
 ---
