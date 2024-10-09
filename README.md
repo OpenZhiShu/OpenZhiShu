@@ -1,4 +1,8 @@
-# OpenZhiShu
+<div align="center">
+    <img src="/assets/banner-big.png" height="160" alt="OpenZhiShu">
+</div>
+
+---
 
 OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 - 明確的名單檔案, 非常低的使用門檻
@@ -9,7 +13,8 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 
 ## 使用方法
 
-> **NOTE:** 請至少閱讀本段落以確保程式執行預期內的行為, 如果還想要自訂畫面, 則請閱讀[Config](#config)段落  
+> [!IMPORTANT]
+> 請至少閱讀本段落以確保程式執行預期內的行為, 如果還想要自訂畫面, 則請閱讀[Config](#config)段落  
 
 ### 準備階段
 
@@ -97,20 +102,22 @@ http://localhost:8080
 - 結果 `/result/{number}`
 - 設定畫面 `settings`
     - 下載結果  
-      **NOTE:** 不要把它存到目錄中的`./results.json`, 因為它會被新的結果覆蓋
+> [!WARNING]
+> 不要將結果存到目錄中的`./results.json`, 因為它會被新的結果覆蓋
 
 ## Config
 
-> **推薦:** 先[Fork](https://github.com/OpenZhiShu/OpenZhiShu/fork)這個倉庫, 並修改你自己的副本, 這樣就能儲存你做出的更動
+> [!TIP]
+> 推薦先[Fork](https://github.com/OpenZhiShu/OpenZhiShu/fork)這個倉庫, 並修改你自己的副本, 這樣就能儲存你做出的更動
 
 自訂畫面需要修改`./configs/config.json`檔, 其中應該有幾個欄位:
 - homepage: page
 - drawing: page
 - result: page
 
-> **NOTE:** 修改後需要重新執行`./OpenZhiShu`才會套用新的設定
-
-> **NOTE:** 在`./configs/static/`中的檔案可以透過`/static`存取, 例如一個圖片在`./configs/static/image.png`, 可以使用`{ "type": "image", "content": "/static/image.png" }`
+> [!NOTE]
+> 1. 修改後需要重新執行`./OpenZhiShu`才會套用新的設定
+> 2. 在`./configs/static/`中的檔案可以透過`/static`存取, 例如一個圖片在`./configs/static/image.png`, 可以使用`{ "type": "image", "content": "/static/image.png" }`
 
 ### 頁面
 
