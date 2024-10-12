@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -157,6 +158,35 @@ func main() {
 	}))
 	http.HandleFunc("/result/{number}", genDrawingHandleFunc(cfg.ResultConfig, &drawingData, &list))
 	http.HandleFunc("/results/results.json", func(w http.ResponseWriter, r *http.Request) { http.ServeFile(w, r, "./results.json") })
+	http.HandleFunc("/results/results.csv", func(w http.ResponseWriter, r *http.Request) {
+		results := drawingData.Results()
+		rs := make([][]string, 0, len(results))
+		for _, v := range list.Freshmen {
+			paired, inMap := results[v.Key()]
+			if !inMap {
+				continue
+			}
+			rs = append(rs, append(
+				[]string{strconv.Itoa(v.Number), v.Name},
+				slices.Collect(func(yield func(string) bool) {
+					for _, p := range paired {
+						if !yield(strconv.Itoa(p.Number)) {
+							return
+						}
+						if !yield(p.Name) {
+							return
+						}
+					}
+				})...,
+			))
+		}
+		slices.SortFunc(rs, func(a []string, b []string) int {
+			aAsInt, _ := strconv.Atoi(a[0])
+			bAsInt, _ := strconv.Atoi(b[0])
+			return aAsInt - bAsInt
+		})
+		csv.NewWriter(w).WriteAll(rs)
+	})
 	http.HandleFunc("PUT /drawing/all", func(w http.ResponseWriter, r *http.Request) {
 		drawingData.DrawAll()
 		SaveResults(drawingData.Results(), &list)

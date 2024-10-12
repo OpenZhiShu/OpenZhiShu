@@ -118,7 +118,10 @@
 
 		<h2 id="operation">操作</h2>
 		<a class="operation-item" href="/results/results.json" download="results.json">
-			<span>下載結果</span>
+			<span>下載結果 (json)</span>
+		</a>
+		<a class="operation-item" href="/results/results.csv" download="results.csv">
+			<span>下載結果 (csv)</span>
 		</a>
 		<span class="operation-item" hx-put="/drawing/all" hx-trigger="click" hx-confirm="確定要幫剩下的抽嗎?">幫剩下的抽</span>
 		<span class="operation-item" hx-delete="/results/delete" hx-trigger="click" hx-confirm="確定要全部重抽嗎?">刪除記錄 (全部重抽)</span>
