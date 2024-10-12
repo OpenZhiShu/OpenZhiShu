@@ -34,9 +34,9 @@ OpenZhiShu是一個抽直屬的工具, 圍繞以下幾個核心理念設計:
 
 3. 若你的環境沒有且不想安裝git或go, 可以參考以下做法:
     - 沒有git:  
-        從GitHub的Download ZIP功能直接下載最新版本, ~或是前往Releases頁面下載特定版本的壓縮檔~
+        從GitHub的Download ZIP功能直接下載最新版本, 或是前往[Releases](https://github.com/OpenZhiShu/OpenZhiShu/releases)頁面下載特定版本的壓縮檔
     - 沒有go:  
-        ~前往Releases頁面下載編譯完成的可執行檔, 並將其放入專案的目錄中~
+        前往[Releases](https://github.com/OpenZhiShu/OpenZhiShu/releases)頁面下載編譯完成的可執行檔, 並將其放入專案的目錄中
 
 準備完成後, 應該會有一個類似這樣的目錄結構:
 ```
